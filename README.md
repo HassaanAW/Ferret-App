@@ -1,1 +1,2 @@
-# ferret-app-latest
+# ferret-app
+Source code for ferret app

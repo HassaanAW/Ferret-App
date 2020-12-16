@@ -1,0 +1,106 @@
+<resources>
+    <string name="app_name">Ferret</string>
+    <string name="app_version">v0.8</string>
+
+    <string name="app_description">Uncover weaknesses in your WiFi</string>
+
+    <string name="progress0">Getting Started...</string>
+    <string name="progress1">Ferreting around for devices</string>
+    <string name="progress2">Ferreting around for weaknesses</string>
+
+    <string name="progress3a">No vulnerable devices detected</string>
+    <string name="progress3b">vulnerable devices detected</string>
+
+    <string name="message1a"> Looks like some of your devices have weak security. Attackers can target these devices to elicit your private information.</string>
+    <string name="message1b">Congratulations. All your devices are secure. However, attackers keep on coming up with new ways to target your devices and elicit your private information.</string>
+    <string name="message1c">Would you consider paying to make your devices more secure and help protect your privacy?</string>
+    <string name="message1d">(We can send one of our technicians your way to do the necessary fixes)</string>
+
+    <string name="message2">Which of these potential payment plans would you be the most comfortable with:</string>
+    <string name="message2a">One time security patching: 3000Rs </string>
+    <string name="message2b">Continual security surveillance subscription: 2000Rs/Month</string>
+    <string name="message2c">Neither (Suggest a payment plan)</string>
+
+    <string name="message3">Suggest a payment plan:              </string>
+
+    <string name="message4">Please keep the application running in the background for a while. It helps us make the application even better for your future use. \nThis might take 1 to 5 hours. \nAfter this is done, we will share a secret key that you will need for the next part of the homework.</string>
+
+    <string name="message5">Thank you for running the application! Please enter your name so that we can add it to our cool-people list:</string>
+
+    <string name="message6">Before we start, where are you running the application? </string>
+    <string name="message6a">A home</string>
+    <string name="message6b">A cafe/restaurant</string>
+    <string name="message6c">Other</string>
+
+    <string name="message7">A <b>MAC Address</b> is a globally unique identifier for a device.</string>
+    <string name="message7a">As a Computer Science student, you should be able to figure out a device\'s <b>MAC Address</b>.</string>
+    <string name="message7b">Here are a few examples on how to do so:</string>
+    <string name="message7c">Android Phone or Tablet</string>
+    <string name="message7c2">https://kb.iu.edu/d/bbis</string>
+    <string name="message7d">Mac OS X</string>
+    <string name="message7d2">https://www.iclarified.com/30929/how-to-find-your-mac-address-in-mac-os-x</string>
+    <string name="message7e">A TP-Link Router</string>
+    <string name="message7e2">https://www.tp-link.com/us/faq-126.html</string>
+
+    <string name="message7f">As a first step you can try to find a list of connected devices along with MAC Addresses
+        on your router\'s homepage.</string>
+    <string name="message7f2">For example, here is how you do it for a NETGEAR router:</string>
+    <string name="message7f3">https://www.wikihow.com/See-Who-Is-Connected-to-Your-Wireless-Network</string>
+
+    <string name="message7g">You can also individually check the devices in your home for their MAC Address.</string>
+
+    <string name="message7h">Try the gateway homepage</string>
+
+    <string name="message8">Figuring out a device\'s MAC Address</string>
+
+    <string name="message9a">Grab a Pen and Paper!</string>
+    <string name="message9b">You are going to need a pen and paper for the next step.\n\nPlease take some time to figure
+        out the MAC Addresses of all the devices in your home.\n\nOn a piece of paper, write each device\'s type (Laptop, Cellphone,
+        Router, etc), Model (One Plus X, MacBook Pro 3, iPad Air 2, etc), and the MAC Address (for example, 00:0a:95:9d:68:16).
+        \n\nOnce you have a complete list, click PROCEED.</string>
+
+    <string name="MACAddressHelp">How do I find a device\'s MAC Address?</string>
+
+    <string name="labelTime">Time to label the devices!</string>
+
+    <string name="recognize">Can you recognize what device in your home has this MAC Address?</string>
+    <string name="recognized">If yes, tell us its: </string>
+
+    <string-array name="deviceTypes">
+        <item>Router/Gateway</item>
+        <item>Laptop</item>
+        <item>PC</item>
+        <item>CellPhone</item>
+        <item>Smart TV</item>
+        <item>Smart Fridge</item>
+        <item>Smart Bulb</item>
+        <item>Tablet</item>
+        <item>Security Camera</item>
+        <item>Network Attached Storage</item>
+        <item>Smart Speaker (Alexa, Google Home etc)</item>
+        <item>Other</item>
+    </string-array>
+
+    <string name="Done">And we\'re done! Before you leave, tell us where you ran the application:</string>
+
+    <string-array name="placeOptions">
+        <item>A Home</item>
+        <item>A Cafe/Restaurant</item>
+        <item>Other</item>
+    </string-array>
+
+    <string name="secretKey"> Here is a secret key that you will need for the next part of the homework.
+        Be sure to write it down somewhere safe for future use.</string>
+
+    <string name="dataCollection"> Data Collection </string>
+    <string name="dataCollectionText"> The application is going to collect the following data for the network you are currently on:</string>
+    <string name="dataCollectionText1"> Information on the connected devices like vendor, device model, hashed MAC Address, IP address. </string>
+    <string name="dataCollectionText2"> A list of open ports and servers running — along with the vulnerabilities they have — on the connected devices. </string>
+    <string name="dataCollectionText3"> The public IP of the network. </string>
+    <string name="dataCollectionText4"> Device names as they help us identify the type of device (for example, Wajeeha’s Ipad). You can choose to opt out of this if you want to.</string>
+
+    <string name="nameCollectionConsent"> I agree to my device names being collected </string>
+    <string name="macAddressesNotFound"> Unfortunately, we were unable to collect the MAC addresses of any of your devices.</string>
+    <string name="pleaserunagain"> Please run the scan again.</string>
+
+</resources>

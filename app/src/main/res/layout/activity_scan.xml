@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.talhajavedmukhtar.ferret.ScanActivity">
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@id/name"
+            android:src="@drawable/logo"/>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ferret"
+            android:textSize="30dp"
+            android:textColor="@color/Shakespeare"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/networkInfo"
+        android:layout_below="@id/header"
+        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/networkName"
+            android:text="Network Name Here"
+            android:textSize="20dp"
+            android:layout_centerInParent="true"/>-->
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/progress"
+        android:layout_below="@id/networkInfo"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:progressTint="@color/Shakespeare"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:id="@+id/progressBar"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/progress0"
+            android:textSize="16dp"
+            android:textColor="@color/Shakespeare"
+            android:id="@+id/progressStatus"
+            android:layout_below="@id/progressBar"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/paymentMessage"
+        android:layout_below="@id/progress"
+        android:layout_margin="10dp"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        <TextView
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/message1c"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/positiveButton"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="YES"
+                />
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/negativeButton"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="NO"/>
+            <Button
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:id="@+id/learnMore"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="LEARN MORE"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <ListView
+        android:id="@+id/hostData"
+        android:layout_below="@id/paymentMessage"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+
+    </ListView>
+
+
+
+</RelativeLayout>

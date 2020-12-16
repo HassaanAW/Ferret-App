@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "991017337562",
+    "firebase_url": "https://ferret-23021.firebaseio.com",
+    "project_id": "ferret-23021",
+    "storage_bucket": "ferret-23021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991017337562:android:448e76534fbe7a4e",
+        "android_client_info": {
+          "package_name": "com.talhajavedmukhtar.ferret"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991017337562-b9jd1ivd0qfepj1gm44gg6e073doe46k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIDzncerp_ks8hjtALybdIpb6jM1bcny8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

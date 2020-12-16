@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@id/name"
+            android:src="@drawable/logo"/>
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ferret"
+            android:textSize="30dp"
+            android:textColor="@color/Shakespeare"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/progress"
+        android:layout_below="@id/header"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:progressTint="@color/Shakespeare"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:id="@+id/progressBar"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_below="@id/header"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center">
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/wait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/wait"/>
+        <TextView
+            android:layout_margin="30dp"
+            android:layout_below="@id/wait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/message4"
+            android:textStyle="bold"
+            android:textColor="@color/Shakespeare"
+            android:textSize="18dp"/>
+    </RelativeLayout>
+
+
+</RelativeLayout>

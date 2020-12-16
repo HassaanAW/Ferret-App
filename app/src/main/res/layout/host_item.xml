@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="140dp">
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <ImageView
+            android:layout_margin="10dp"
+            android:id="@+id/deviceType"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/question"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_margin="10dp"
+        android:layout_weight="3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/vendorName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="VENDOR"
+            android:textSize="25dp"/>
+        <TextView
+            android:id="@+id/deviceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vendorName"
+            android:text="NAME"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:id="@+id/ipAddress"
+            android:layout_below="@+id/deviceName"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="IP"
+            android:textSize="16dp"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <ImageView
+            android:layout_margin="10dp"
+            android:id="@+id/info"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/info"/>
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_margin="10dp"
+            android:layout_below="@id/info"
+            android:id="@+id/status"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/wait"/>
+    </RelativeLayout>
+
+
+</LinearLayout>
