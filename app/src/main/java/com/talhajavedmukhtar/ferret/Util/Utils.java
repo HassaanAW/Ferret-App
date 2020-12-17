@@ -192,11 +192,17 @@ public class Utils {
     }
 
     public static String getMACAddress(String ipAd){
+        String NEIGHBOR_INCOMPLETE = "INCOMPLETE";
+        String NEIGHBOR_FAILED = "FAILED";
         BufferedReader bufferedReader = null;
         try {
             Runtime runtime = Runtime.getRuntime();
-            Process proc = runtime.exec("ip neigh show");
+            Process proc = runtime.exec("ip neighbor");
             proc.waitFor();
+            proc.waitFor();
+            if (proc.exitValue() != 0) {
+                throw new Exception("Unable to access ARP entries");
+            }
             bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
 
@@ -205,28 +211,38 @@ public class Utils {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 Log.d(TAG, "arpFile: " + line);
-                String[] splitted = line.split(" +");
+                String[] splitted = line.split("\\s+");
                 for (String a : splitted)
                     Log.d(TAG, "splitted: " + a);
 //                    System.out.println(a);
 
+                if (splitted.length <= 4) {
+                    continue;
+                }
 
-                if (splitted != null && splitted.length >= 4) {
                     String ip = splitted[0];
+
+                InetAddress addr = InetAddress.getByName(ip);
+                if (addr.isLinkLocalAddress() || addr.isLoopbackAddress()) {
+                    continue;
+                }
                     String mac = splitted[4];
+                    String state = splitted[splitted.length - 1];
 //                    Log.d("IP", "ip: " + ip);
 //                    Log.d("Mac", "mac: " + mac);
 
 
 //                    String mac = splitted[3];
-                    if (mac.matches("..:..:..:..:..:..")) {
-                        if (!mac.equals("00:00:00:00:00:00")) {
-                            if(ip.equals(ipAd)){
-                                return mac;
+                    if (!NEIGHBOR_FAILED.equals(state) && !NEIGHBOR_INCOMPLETE.equals(state)) {
+                        if (mac.matches("..:..:..:..:..:..")) {
+                            if (!mac.equals("00:00:00:00:00:00")) {
+                                if (ip.equals(ipAd)) {
+                                    return mac;
+                                }
                             }
                         }
                     }
-                }
+
             }
         } catch (Exception e) {
 //            e.printStackTrace();
