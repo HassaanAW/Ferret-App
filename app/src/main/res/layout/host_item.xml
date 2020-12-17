@@ -12,7 +12,9 @@
             android:id="@+id/deviceType"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:tint="@color/White"
             android:src="@drawable/question"/>
+
     </RelativeLayout>
     <RelativeLayout
         android:layout_margin="10dp"
@@ -24,6 +26,7 @@
             android:id="@+id/vendorName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/White"
             android:text="VENDOR"
             android:textSize="25dp"/>
         <TextView
@@ -31,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/vendorName"
+            android:textColor="@color/White"
             android:text="NAME"
             android:textSize="20dp"
             android:layout_marginTop="10dp"/>
@@ -40,6 +44,7 @@
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/White"
             android:text="IP"
             android:textSize="16dp"/>
     </RelativeLayout>
@@ -53,6 +58,8 @@
             android:id="@+id/info"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:tint="@color/White"
+
             android:src="@drawable/info"/>
         <pl.droidsonroids.gif.GifImageView
             android:layout_margin="10dp"
@@ -60,6 +67,7 @@
             android:id="@+id/status"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:tint="@color/White"
             android:src="@drawable/wait"/>
     </RelativeLayout>
 
