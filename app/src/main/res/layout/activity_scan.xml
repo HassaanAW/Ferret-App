@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.talhajavedmukhtar.ferret.ScanActivity">
+
     <RelativeLayout
         android:id="@+id/header"
         android:layout_marginTop="10dp"
@@ -55,15 +56,29 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:id="@+id/progressBar"/>
+
+
         <TextView
+            android:id="@+id/progressStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/progressBar"
             android:layout_marginLeft="20dp"
             android:text="@string/progress0"
-            android:textSize="16dp"
             android:textColor="@color/Shakespeare"
-            android:id="@+id/progressStatus"
-            android:layout_below="@id/progressBar"/>
+            android:textSize="16dp"
+            android:translationX="20dp" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/progressbarspinner"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="#FFFFFF"
+            android:src="@drawable/wait"
+            android:tint="@color/Shakespeare"
+            android:translationX="15dp"
+            android:translationY="41dp" />
+
 
     </RelativeLayout>
 
