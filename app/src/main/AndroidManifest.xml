@@ -49,6 +49,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".WhereActivity" />
         <activity android:name=".MacNotFoundActivity" />
+        <activity android:name=".ThankYouActivity" />
+
     </application>
 
 </manifest>

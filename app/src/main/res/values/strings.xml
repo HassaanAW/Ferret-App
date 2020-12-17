@@ -102,5 +102,7 @@
     <string name="nameCollectionConsent"> I agree to my device names being collected </string>
     <string name="macAddressesNotFound"> Unfortunately, we were unable to collect the MAC addresses of any of your devices.</string>
     <string name="pleaserunagain"> Please run the scan again.</string>
+    <string name="thankyou">Thank you for participating!</string>
+    <string name="runagain">Do you wish to run the scan again?</string>
 
 </resources>

@@ -10,5 +10,6 @@
 
     <color name="White">#FFFFFF</color>
     <color name="Black">#000000</color>
+    <color name="frowncolors">#FF0000</color>
 
 </resources>

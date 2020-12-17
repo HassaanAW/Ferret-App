@@ -275,7 +275,7 @@ public class LabellingActivity extends AppCompatActivity {
     }
 
     private void goToNext(){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ThankYouActivity.class);
         startActivity(intent);
         finish();
     }

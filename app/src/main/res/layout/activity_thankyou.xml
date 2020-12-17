@@ -49,17 +49,17 @@
                     android:layout_margin="10dp"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/macAddressesNotFound"
+                    android:text="@string/thankyou"
                     android:textStyle="bold"
                     android:textColor="@color/White"
-                    android:textSize="18dp"/>
+                    android:textSize="35dp"/>
                 <ImageView
                     android:id="@+id/vulnerable"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:tint="@color/frowncolors"
-                    android:src="@drawable/vulnerable"/>
+                    android:tint="#FFD662"
+                    android:src="@drawable/safe"/>
             </LinearLayout>
 
             <TextView
@@ -68,7 +68,7 @@
                 android:paddingTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/pleaserunagain"
+                android:text="@string/runagain"
                 android:textStyle="bold"
                 android:textColor="@color/White"
                 android:textSize="18dp"/>
@@ -92,14 +92,13 @@
                     android:background="@color/Black"
                     android:textColor="@color/White"
                     style="@style/Widget.AppCompat.Button.Borderless"
-                    android:id="@+id/restartbutton"
+                    android:id="@+id/restartbuttonthankyou"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="2dp"
-                    android:textSize="20dp"
-
                     android:text="Restart"
+                    android:textSize="20dp"
                     />
 <!--                <Button-->
 <!--                    android:background="@color/Black"-->

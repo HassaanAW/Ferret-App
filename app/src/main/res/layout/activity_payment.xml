@@ -58,6 +58,7 @@
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:tint="@color/frowncolors"
                     android:src="@drawable/vulnerable"/>
             </LinearLayout>
 
