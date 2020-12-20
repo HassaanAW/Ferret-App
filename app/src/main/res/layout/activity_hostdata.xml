@@ -15,13 +15,14 @@
             android:layout_height="wrap_content"
             android:textColor="@color/Black"
             android:text="Device Details:"
-            android:textSize="25dp"/>
+            android:textSize="25dp"
+            />
 
         <TextView
 
             android:id="@+id/vendorLabel"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:textColor="@color/Black"
             android:layout_below="@id/deviceDetails"
             android:layout_marginTop="10dp"
@@ -32,7 +33,7 @@
 
             android:id="@+id/vendor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
 
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/vendorLabel"
@@ -50,7 +51,7 @@
             android:textColor="@color/Black"
             android:text="Name:"
             android:textSize="20dp"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="20dp"/>
 
         <TextView
 
@@ -58,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
 
             android:layout_toRightOf="@id/deviceNameLabel"
             android:layout_below="@id/vendor"
@@ -69,7 +70,7 @@
         <TextView
             android:id="@+id/ipAddressLabel"
             android:layout_below="@+id/deviceNameLabel"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:textColor="@color/Black"
@@ -82,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_toRightOf="@id/ipAddressLabel"
             android:layout_below="@id/deviceNameLabel"
 
@@ -93,7 +94,7 @@
         <TextView
             android:id="@+id/vulnerableLabel"
             android:layout_below="@+id/ipAddressLabel"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:textColor="@color/Black"
@@ -106,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_toRightOf="@id/vulnerableLabel"
             android:layout_below="@id/ipAddress"
 

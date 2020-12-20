@@ -98,7 +98,7 @@ public class ScanActivity extends AppCompatActivity {
 
         hosts = new ArrayList<>();
         hostView = findViewById(R.id.hostData);
-
+        hostView.setAlpha(0.7f);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setMax(120);
 
@@ -561,6 +561,7 @@ public class ScanActivity extends AppCompatActivity {
 
 
     private void scanDoneScreen() {
+        hostView.setAlpha(1f);
         final GifImageView loadingImage = (GifImageView) findViewById(R.id.progressbarspinner);
         loadingImage.setImageResource( R.drawable.loading_done_tick);
 
