@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -45,6 +47,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import pl.droidsonroids.gif.GifImageView;
+
 import static android.app.Notification.VISIBILITY_PUBLIC;
 
 public class ScanActivity extends AppCompatActivity {
@@ -71,6 +75,7 @@ public class ScanActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private TextView progressStatus;
+    private Button continuetopayment;
 
     public static Handler UIHandler;
 
@@ -252,7 +257,7 @@ public class ScanActivity extends AppCompatActivity {
 
             @Override
             public void onCompletion() {
-
+                Log.d(TAG, "getting into onCompletion function");
                 ArrayList<Host> additionalHosts = Utils.getRemainingHostsFromARP(hosts,context);
                 for(final Host h: additionalHosts){
                     Log.d(TAG,"Additional Host Found: "+ h.getIpAddress());
@@ -363,6 +368,7 @@ public class ScanActivity extends AppCompatActivity {
                                 if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
                                     saveData();
                                     updateProgress(3);
+
                                     Log.d(TAG,"Data saved from PS");
                                 }
                             }
@@ -407,7 +413,7 @@ public class ScanActivity extends AppCompatActivity {
             notificationManager.cancel(NOTIFICATION_ID);
             notificationFired = false;
             //goToPortScanActivity();
-            openPaymentActivity();
+//            openPaymentActivity();
         }
 
         super.onStart();
@@ -421,6 +427,7 @@ public class ScanActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
+        Log.d(TAG, "activity restarted");
         super.onRestart();
 
         if(MyApp.PaymentQuestionSeen()){
@@ -490,13 +497,14 @@ public class ScanActivity extends AppCompatActivity {
                         break;
                     case 3:
                         progressBar.setProgress(120);
+
                         int vulnDevices = getNoOfVulnDevices();
                         if(vulnDevices == 0){
                             progressStatus.setText(Constants.PROGRESS3A);
                         }else{
                             progressStatus.setText(Integer.toString(vulnDevices)+Constants.PROGRESS3B);
                         }
-
+                        scanDoneScreen();
                         break;
                     default:
                 }
@@ -537,7 +545,26 @@ public class ScanActivity extends AppCompatActivity {
         MyApp.setIpsForPortScan(ips);
 
 
-        openPaymentActivity();
+
+
+
+
+
+    }
+
+    private void scanDoneScreen() {
+        final GifImageView loadingImage = (GifImageView) findViewById(R.id.progressbarspinner);
+        loadingImage.setImageResource( R.drawable.loading_done_tick);
+
+        continuetopayment = findViewById(R.id.continuetopayment);
+        continuetopayment.setBackgroundColor(Color.parseColor("#000000"));
+
+        continuetopayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openPaymentActivity();
+            }
+        });
     }
 
     /*private void openPaymentDialog(){

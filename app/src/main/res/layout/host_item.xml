@@ -10,10 +10,10 @@
         <ImageView
             android:layout_margin="10dp"
             android:id="@+id/deviceType"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:tint="@color/White"
-            android:src="@drawable/question"/>
+            android:src="@drawable/device_icon"/>
 
     </RelativeLayout>
     <RelativeLayout
