@@ -199,7 +199,7 @@ public class Utils {
             Runtime runtime = Runtime.getRuntime();
             Process proc = runtime.exec("ip neighbor");
             proc.waitFor();
-            proc.waitFor();
+
             if (proc.exitValue() != 0) {
                 throw new Exception("Unable to access ARP entries");
             }

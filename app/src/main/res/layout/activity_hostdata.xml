@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="300dp">
+
+    <RelativeLayout
+        android:layout_margin="10dp"
+        android:layout_weight="3"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/deviceDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/Black"
+            android:text="Device Details:"
+            android:textSize="25dp"/>
+
+        <TextView
+
+            android:id="@+id/vendorLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/Black"
+            android:layout_below="@id/deviceDetails"
+            android:layout_marginTop="10dp"
+            android:text="Vender:"
+            android:textSize="20dp"/>
+
+        <TextView
+
+            android:id="@+id/vendor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/vendorLabel"
+            android:layout_below="@id/deviceDetails"
+
+            android:text="..."
+            android:textColor="@color/Shakespeare"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/deviceNameLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/vendorLabel"
+            android:textColor="@color/Black"
+            android:text="Name:"
+            android:textSize="20dp"
+            android:layout_marginTop="40dp"/>
+
+        <TextView
+
+            android:id="@+id/deviceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
+            android:layout_toRightOf="@id/deviceNameLabel"
+            android:layout_below="@id/vendor"
+
+            android:text="..."
+            android:textColor="@color/Shakespeare"
+            android:textSize="20dp" />
+        <TextView
+            android:id="@+id/ipAddressLabel"
+            android:layout_below="@+id/deviceNameLabel"
+            android:layout_marginTop="40dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/Black"
+            android:text="IP Address:"
+            android:textSize="20dp"/>
+
+        <TextView
+
+            android:id="@+id/ipAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_toRightOf="@id/ipAddressLabel"
+            android:layout_below="@id/deviceNameLabel"
+
+            android:text="..."
+            android:textColor="@color/Shakespeare"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/vulnerableLabel"
+            android:layout_below="@+id/ipAddressLabel"
+            android:layout_marginTop="40dp"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/Black"
+            android:text="Vulnerable:"
+            android:textSize="20dp"/>
+
+        <TextView
+
+            android:id="@+id/vulnerable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_toRightOf="@id/vulnerableLabel"
+            android:layout_below="@id/ipAddress"
+
+            android:text="..."
+            android:textColor="@color/Blood"
+            android:textSize="20dp" />
+    </RelativeLayout>
+
+
+
+</LinearLayout>

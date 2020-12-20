@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -118,6 +119,7 @@ public class ScanActivity extends AppCompatActivity {
         final HostAdapter hostAdapter = new HostAdapter(hosts,this);
 
         hostView.setAdapter(hostAdapter);
+
 
         context = this;
 
@@ -478,6 +480,9 @@ public class ScanActivity extends AppCompatActivity {
         //we don't allow that up in here boy
     }
 
+
+
+
     private void updateProgress(final int progress){
         ScanActivity.runOnUI(new Runnable() {
             @Override
@@ -504,6 +509,7 @@ public class ScanActivity extends AppCompatActivity {
                         }else{
                             progressStatus.setText(Integer.toString(vulnDevices)+Constants.PROGRESS3B);
                         }
+                        clickDeviceDetails();
                         scanDoneScreen();
                         break;
                     default:
@@ -552,6 +558,8 @@ public class ScanActivity extends AppCompatActivity {
 
     }
 
+
+
     private void scanDoneScreen() {
         final GifImageView loadingImage = (GifImageView) findViewById(R.id.progressbarspinner);
         loadingImage.setImageResource( R.drawable.loading_done_tick);
@@ -567,6 +575,35 @@ public class ScanActivity extends AppCompatActivity {
         });
     }
 
+    private void clickDeviceDetails()
+    {
+        hostView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG,"in click listener before");
+
+                Host currhost = hosts.get(i);
+                Intent intent = new Intent(getApplicationContext(),HostDataActivity.class);
+
+                intent.putExtra("vendor",currhost.getVendor());
+                intent.putExtra("name",currhost.getDeviceName());
+                intent.putExtra("ip",currhost.getIpAddress());
+                intent.putExtra("vulnerable",currhost.getVulnerable());
+
+                Log.d(TAG,currhost.getVendor());
+                Log.d(TAG,currhost.getDeviceName());
+                Log.d(TAG,currhost.getIpAddress());
+                Log.d(TAG,Boolean.toString(currhost.getVulnerable()));
+
+
+                Log.d(TAG,"in click listener after");
+
+
+                startActivity(intent);
+
+            }
+        });
+    }
     /*private void openPaymentDialog(){
         //Check if any vulnerabilities found
         Boolean vulnerable = false;
