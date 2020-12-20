@@ -273,18 +273,46 @@ public class Utils {
         }
 
         MyApp myApp = (MyApp) context.getApplicationContext();
-
+        // new ip neigh code
+        String NEIGHBOR_INCOMPLETE = "INCOMPLETE";
+        String NEIGHBOR_FAILED = "FAILED";
         BufferedReader bufferedReader = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
+            Runtime runtime = Runtime.getRuntime();
+            Process proc = runtime.exec("ip neighbor");
+            proc.waitFor();
+
+            if (proc.exitValue() != 0) {
+                throw new Exception("Unable to access ARP entries");
+            }
+            bufferedReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                //Log.d(TAG, "arpFile: " + line);
-                String[] splitted = line.split(" +");
-                if (splitted != null && splitted.length >= 4) {
-                    String ip = splitted[0];
-                    String mac = splitted[3];
+                Log.d(TAG, "arpFile: " + line);
+                String[] splitted = line.split("\\s+");
+                for (String a : splitted)
+                    Log.d(TAG, "splitted: " + a);
+//                    System.out.println(a);
+
+                if (splitted.length <= 4) {
+                    continue;
+                }
+
+                String ip = splitted[0];
+
+                InetAddress addr = InetAddress.getByName(ip);
+                if (addr.isLinkLocalAddress() || addr.isLoopbackAddress()) {
+                    continue;
+                }
+                String mac = splitted[4];
+                String state = splitted[splitted.length - 1];
+//                    Log.d("IP", "ip: " + ip);
+//                    Log.d("Mac", "mac: " + mac);
+
+
+//                    String mac = splitted[3];
+                if (!NEIGHBOR_FAILED.equals(state) && !NEIGHBOR_INCOMPLETE.equals(state)) {
                     if (mac.matches("..:..:..:..:..:..")) {
                         if (!mac.equals("00:00:00:00:00:00")) {
                             if(!ipAddresses.contains(ip)){
@@ -333,19 +361,101 @@ public class Utils {
                         }
                     }
                 }
+
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally{
+
+
+
+        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println(e.getMessage());
+//            System.out.println(e);
+        }
+//        catch (IOException e) {
+////            e.printStackTrace();
+//        }
+        finally{
             try {
                 if(bufferedReader != null)
-                bufferedReader.close();
+                    bufferedReader.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
+
+            //old arp code
+//        BufferedReader bufferedReader = null;
+//        try {
+//            bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
+//
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                //Log.d(TAG, "arpFile: " + line);
+//                String[] splitted = line.split(" +");
+//                if (splitted != null && splitted.length >= 4) {
+//                    String ip = splitted[0];
+//                    String mac = splitted[3];
+//                    if (mac.matches("..:..:..:..:..:..")) {
+//                        if (!mac.equals("00:00:00:00:00:00")) {
+//                            if(!ipAddresses.contains(ip)){
+//                                String vendor;
+//                                try{
+//                                    vendor = myApp.getMap().findVendor(mac);
+//                                }catch (Exception ex){
+//                                    vendor = "Unknown";
+//                                }
+//
+//                                String name;
+//                                byte[] address = getBytesFromString(ip);
+//
+//                                try{
+//                                    InetAddress inetAddress = InetAddress.getByAddress(address);
+//                                    Log.d(TAG,"Passed this");
+//
+//                                    /*Boolean reachable = inetAddress.isReachable(1000);
+//
+//                                    if(reachable){
+//                                        Log.d(TAG,"Was reached");
+//                                    }else{
+//                                        Log.d(TAG, "Could not reach");
+//                                    }*/
+//
+//                                    name = inetAddress.getCanonicalHostName();
+//                                }catch (Exception ex){
+//                                    //Log.d(TAG,"Other");
+//                                    name = "Unknown Name";
+//                                }
+//
+//
+//                                Host newHost = new Host();
+//                                newHost.setIpAddress(ip);
+//                                newHost.addDiscoveredThrough(Constants.ARP);
+//                                newHost.setVendor(vendor);
+//                                newHost.setDeviceName(name);
+//
+//
+//                                newHost.setMAhash(md5(mac));
+//
+//                                MyApp.addDeviceDetails(ip,mac,vendor);
+//
+//                                additionalHosts.add(newHost);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally{
+//            try {
+//                if(bufferedReader != null)
+//                bufferedReader.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         return additionalHosts;
     }
