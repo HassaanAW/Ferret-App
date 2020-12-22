@@ -89,6 +89,7 @@ public class CVESearchHelper {
                 String description = parts[1];
 
                 if (identifier.equals(ident)){
+
                     return description;
                 }
             }

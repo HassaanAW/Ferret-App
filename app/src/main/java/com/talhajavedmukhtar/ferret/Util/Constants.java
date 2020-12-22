@@ -20,6 +20,7 @@ public class Constants {
     public static final String PROGRESS0 = "Getting Started...";
     public static final String PROGRESS1 = "Ferreting around for devices...";
     public static final String PROGRESS2 = "Ferreting around for weaknesses...";
-    public static final String PROGRESS3A = "No vulnerable devices detected";
-    public static final String PROGRESS3B = " vulnerable device(s) detected";
+    public static final String PROGRESS3 = "Processing... Please wait...";
+    public static final String PROGRESS4A = "No vulnerable devices detected";
+    public static final String PROGRESS4B = " vulnerable device(s) detected";
 }

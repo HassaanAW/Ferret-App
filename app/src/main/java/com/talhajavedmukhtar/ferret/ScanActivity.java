@@ -208,10 +208,12 @@ public class ScanActivity extends AppCompatActivity {
                                 Log.d(TAG,"Vulnerability Checks ended; About to push data");
                                 DataHandler dataHandler = new DataHandler(context);
                                 dataHandler.pushData(allData);*/
+
                                 saveData();
-                                updateProgress(3);
+                                updateProgress(4);
                                 Log.d(TAG,"Data saved from VF");
                             }
+
                         }
                     }
                 };
@@ -240,8 +242,9 @@ public class ScanActivity extends AppCompatActivity {
                             Log.d(TAG,"Ports Scanned for: "+ Integer.toString(portsScanned) + " devices");
 
                             if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
+
                                 saveData();
-                                updateProgress(3);
+                                updateProgress(4);
                                 Log.d(TAG,"Data saved from PS");
                             }
                         }
@@ -336,8 +339,10 @@ public class ScanActivity extends AppCompatActivity {
                                     Log.d(TAG,"Vulnerability Checks ended; About to push data");
                                     DataHandler dataHandler = new DataHandler(context);
                                     dataHandler.pushData(allData);*/
+
+
                                     saveData();
-                                    updateProgress(3);
+                                    updateProgress(4);
                                     Log.d(TAG,"Data saved from VF");
                                 }
                             }
@@ -368,8 +373,9 @@ public class ScanActivity extends AppCompatActivity {
                                 Log.d(TAG,"Ports Scanned for: "+ Integer.toString(portsScanned) + " devices");
 
                                 if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
+
                                     saveData();
-                                    updateProgress(3);
+                                    updateProgress(4);
 
                                     Log.d(TAG,"Data saved from PS");
                                 }
@@ -390,7 +396,7 @@ public class ScanActivity extends AppCompatActivity {
                 hostScanEnded = true;
 
                 if(hosts.size() == 0){
-                    updateProgress(3);
+                    updateProgress(4);
                     //No hosts found
                 }else{
                     //in vulnerability checking phase
@@ -500,14 +506,22 @@ public class ScanActivity extends AppCompatActivity {
                         progressBar.setProgress(80);
                         progressStatus.setText(Constants.PROGRESS2);
                         break;
+
                     case 3:
+                        progressBar.setProgress(115);
+                        progressStatus.setText(Constants.PROGRESS3);
+                        break;
+                    case 4:
                         progressBar.setProgress(120);
 
                         int vulnDevices = getNoOfVulnDevices();
                         if(vulnDevices == 0){
-                            progressStatus.setText(Constants.PROGRESS3A);
+                            progressStatus.setText(Constants.PROGRESS4A);
+                            progressStatus.setTextColor(Color.parseColor("#4CAF50"));
+
                         }else{
-                            progressStatus.setText(Integer.toString(vulnDevices)+Constants.PROGRESS3B);
+                            progressStatus.setText(Integer.toString(vulnDevices)+Constants.PROGRESS4B);
+                            progressStatus.setTextColor(Color.parseColor("#f44336"));
                         }
                         clickDeviceDetails();
                         scanDoneScreen();
@@ -525,7 +539,16 @@ public class ScanActivity extends AppCompatActivity {
                 if(progressBar.getProgress() >= 80){
                     int progress = 80 + (((vulnerabilityChecked+portsScanned)*40/(2*hosts.size())));
                     Log.d(TAG,"New progress: "+Integer.toString(progress));
-                    progressBar.setProgress(progress);
+
+                    if (progress == 115)
+                    {
+                        updateProgress(3);
+                    }
+                    else
+                    {
+                        progressBar.setProgress(progress);
+                    }
+
                 }
             }
         });
