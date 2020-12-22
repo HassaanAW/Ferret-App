@@ -12,7 +12,8 @@ public class CVESearcher extends AsyncTask {
     private String softName;
     private String version;
     private String TAG = "CVESearcher";
-
+    private ArrayList<String> vulnsdescs;
+    private Tuple< ArrayList<String>, ArrayList<String>> idents_desc;
     private CVESearcherInterface cveSearcherInterface;
     private Context context;
 
@@ -23,6 +24,7 @@ public class CVESearcher extends AsyncTask {
             this.x = x;
             this.y = y;
         }
+
     }
 
     public CVESearcher(Context context, String softName, String version){
@@ -35,21 +37,32 @@ public class CVESearcher extends AsyncTask {
         this.cveSearcherInterface = cveSearcherInterface;
     }
 
+    public Tuple< ArrayList<String>, ArrayList<String>> getIdentDescs()
+    {
+        return idents_desc;
+    }
+
     @Override
     protected Object doInBackground(Object[] objects) {
         CVESearchHelper cveSearchHelper = new CVESearchHelper(context);
 
         ArrayList<String> vulns = cveSearchHelper.getIdents(softName,version);
 //        Log.d(TAG, "vuln desc"+ cveSearchHelper.getCVEDescription(vulns.get(0)));
-        ArrayList<String> vulnsdescs;
-//        for (int i = 0; i < vulns.size();i++)
-//        {
-//            vulnsdescs.add(cveSearchHelper.getCVEDescription(vulns.get(i)));
-//        }
+
+        if (vulns.size() != 0)
+        {
+            vulnsdescs = new ArrayList<>();
+            for (int i = 0; i < vulns.size();i++)
+            {
+                vulnsdescs.add(cveSearchHelper.getCVEDescription(vulns.get(i)));
+            }
+
+            idents_desc = new Tuple(vulns,vulnsdescs);
+        }
 
 
-
-        return vulns;
+return vulns;
+//        return idents_desc;
     }
 
     @Override

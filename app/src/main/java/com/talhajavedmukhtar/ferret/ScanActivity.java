@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.talhajavedmukhtar.ferret.CVESearcher.CVESearcher;
 import com.talhajavedmukhtar.ferret.HostScanner.HostScanner;
 import com.talhajavedmukhtar.ferret.HostScanner.ScannerInterface;
 import com.talhajavedmukhtar.ferret.Model.DataItem;
@@ -178,7 +179,7 @@ public class ScanActivity extends AppCompatActivity {
                 nameGrabber.executeOnExecutor(threadsExecutor);
 
                 //Start Vulnerability Finder
-                VulnerabilityFinder vulnerabilityFinder = new VulnerabilityFinder(context,h);
+                final VulnerabilityFinder vulnerabilityFinder = new VulnerabilityFinder(context,h);
                 FinderInterface finderInterface = new FinderInterface() {
                     @Override
                     public void onCompletion(DataItem dataItem) {
@@ -186,6 +187,7 @@ public class ScanActivity extends AppCompatActivity {
                         Log.d(TAG,"IP: "+h.getIpAddress() + " Vulnerable: "+vulnerable);
                         int index = hosts.indexOf(h);
                         hosts.get(index).setVulnerable(vulnerable);
+                        hosts.get(index).setIdentDescs(vulnerabilityFinder.getIdentDescs());
 
                         ScanActivity.runOnUI(new Runnable() {
                             @Override
@@ -310,7 +312,7 @@ public class ScanActivity extends AppCompatActivity {
                     //nameGrabber.executeOnExecutor(io.fabric.sdk.android.services.concurrency.AsyncTask.THREAD_POOL_EXECUTOR);
                     nameGrabber.executeOnExecutor(threadsExecutor);
 
-                    VulnerabilityFinder vulnerabilityFinder = new VulnerabilityFinder(context,h);
+                    final VulnerabilityFinder vulnerabilityFinder = new VulnerabilityFinder(context,h);
                     FinderInterface finderInterface = new FinderInterface() {
                         @Override
                         public void onCompletion(DataItem dataItem) {
@@ -318,6 +320,7 @@ public class ScanActivity extends AppCompatActivity {
                             Log.d(TAG,"IP: "+h.getIpAddress() + " Vulnerable: "+vulnerable);
                             int index = hosts.indexOf(h);
                             hosts.get(index).setVulnerable(vulnerable);
+                            hosts.get(index).setIdentDescs(vulnerabilityFinder.getIdentDescs());
 
                             ScanActivity.runOnUI(new Runnable() {
                                 @Override
@@ -618,6 +621,24 @@ public class ScanActivity extends AppCompatActivity {
                 Log.d(TAG,currhost.getDeviceName());
                 Log.d(TAG,currhost.getIpAddress());
                 Log.d(TAG,Boolean.toString(currhost.getVulnerable()));
+                int num_of_vulns = 0;
+                CVESearcher.Tuple ident_descs = currhost.getIdentDescs();
+                if (ident_descs != null && ident_descs.x != null && ident_descs.y != null)
+                {
+                    ArrayList<String> idents = (ArrayList<String>) ident_descs.x;
+                    ArrayList<String> descs = (ArrayList<String>) ident_descs.y;
+                    num_of_vulns = idents.size();
+
+                    intent.putExtra("idents",idents);
+                    intent.putExtra("descs",descs);
+
+//                    for (int j = 0; j < idents.size();j++)
+//                    {
+//                        Log.d(TAG, idents.get(j));
+//                    }
+                }
+
+                intent.putExtra("numofvulnerable",num_of_vulns);
 
 
                 Log.d(TAG,"in click listener after");

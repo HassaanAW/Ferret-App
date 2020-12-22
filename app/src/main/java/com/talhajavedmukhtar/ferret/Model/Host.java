@@ -1,5 +1,7 @@
 package com.talhajavedmukhtar.ferret.Model;
 
+import com.talhajavedmukhtar.ferret.CVESearcher.CVESearcher;
+
 import java.util.ArrayList;
 
 /**
@@ -14,6 +16,7 @@ public class Host {
     private String deviceName;
     private String deviceType;
     private Boolean vulnerable;
+    private CVESearcher.Tuple< ArrayList<String>, ArrayList<String>> ident_descs;
 
     public Host(){
         discoveredThrough = new ArrayList<>();
@@ -26,6 +29,16 @@ public class Host {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public CVESearcher.Tuple< ArrayList<String>, ArrayList<String>> getIdentDescs()
+    {
+        return ident_descs;
+    }
+
+    public void setIdentDescs(CVESearcher.Tuple< ArrayList<String>, ArrayList<String>> ident_descs)
+    {
+        this.ident_descs = ident_descs;
     }
 
     public ArrayList<String> getDiscoveredThrough() {
