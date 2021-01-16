@@ -12,6 +12,8 @@ public class CVESearcher extends AsyncTask {
     private String softName;
     private String version;
     private String TAG = "CVESearcher";
+    private ArrayList<String> vulns;
+
     private ArrayList<String> vulnsdescs;
     private Tuple< ArrayList<String>, ArrayList<String>> idents_desc;
     private CVESearcherInterface cveSearcherInterface;
@@ -46,19 +48,36 @@ public class CVESearcher extends AsyncTask {
     protected Object doInBackground(Object[] objects) {
         CVESearchHelper cveSearchHelper = new CVESearchHelper(context);
 
-        ArrayList<String> vulns = cveSearchHelper.getIdents(softName,version);
-//        Log.d(TAG, "vuln desc"+ cveSearchHelper.getCVEDescription(vulns.get(0)));
+        vulns = new ArrayList<String>();
+        vulnsdescs = new ArrayList<String>();
 
-        if (vulns.size() != 0)
+        ArrayList<String> unfiltered_vulns = cveSearchHelper.getIdents(softName,version);
+
+
+        if (unfiltered_vulns.size() != 0)
         {
-            vulnsdescs = new ArrayList<>();
-            for (int i = 0; i < vulns.size();i++)
+
+            for (int i = 0; i < unfiltered_vulns.size();i++)
             {
-                vulnsdescs.add(cveSearchHelper.getCVEDescription(vulns.get(i)));
+                String desc = cveSearchHelper.getCVEDescription(unfiltered_vulns.get(i));
+                if(!desc.contains("** REJECT **"))
+                {
+                    vulnsdescs.add(desc);
+                    vulns.add(unfiltered_vulns.get(i));
+                }
+
             }
 
             idents_desc = new Tuple(vulns,vulnsdescs);
         }
+
+
+//        ArrayList<String> vulns = cveSearchHelper.getIdents(softName,version);
+//        Log.d(TAG, "vuln desc"+ cveSearchHelper.getCVEDescription(vulns.get(0)));
+
+
+
+
 
 
 return vulns;

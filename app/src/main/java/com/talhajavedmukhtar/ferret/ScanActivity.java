@@ -344,6 +344,7 @@ public class ScanActivity extends AppCompatActivity {
                                     dataHandler.pushData(allData);*/
 
 
+
                                     saveData();
                                     updateProgress(4);
                                     Log.d(TAG,"Data saved from VF");
@@ -511,7 +512,7 @@ public class ScanActivity extends AppCompatActivity {
                         break;
 
                     case 3:
-                        progressBar.setProgress(115);
+//                        progressBar.setProgress(115);
                         progressStatus.setText(Constants.PROGRESS3);
                         break;
                     case 4:
@@ -543,14 +544,9 @@ public class ScanActivity extends AppCompatActivity {
                     int progress = 80 + (((vulnerabilityChecked+portsScanned)*40/(2*hosts.size())));
                     Log.d(TAG,"New progress: "+Integer.toString(progress));
 
-                    if (progress == 115)
-                    {
-                        updateProgress(3);
-                    }
-                    else
-                    {
+
                         progressBar.setProgress(progress);
-                    }
+
 
                 }
             }
