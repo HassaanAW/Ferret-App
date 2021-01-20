@@ -1,179 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.talhajavedmukhtar.ferret.ScanActivity">
 
-    <RelativeLayout
-        android:id="@+id/header"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_toLeftOf="@id/name"
-            android:src="@drawable/logo"/>
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ferret"
-            android:textSize="30dp"
-            android:textColor="@color/Shakespeare"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
+
+    <!--layoutheight 450dp-->
 
     <RelativeLayout
-        android:id="@+id/networkInfo"
-        android:layout_below="@id/header"
-        android:layout_marginTop="0dp"
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <!--<TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/networkName"
-            android:text="Network Name Here"
-            android:textSize="20dp"
-            android:layout_centerInParent="true"/>-->
+        android:layout_height="match_parent">
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/progress"
-        android:layout_below="@id/networkInfo"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ProgressBar
-            android:progressTint="@color/Shakespeare"
-            style="@android:style/Widget.ProgressBar.Horizontal"
+        <RelativeLayout
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:id="@+id/progressBar"/>
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp">
 
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_toLeftOf="@id/name"
+                android:src="@drawable/logo" />
 
-        <TextView
-            android:id="@+id/progressStatus"
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Ferret"
+                android:textColor="@color/Shakespeare"
+                android:textSize="30dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/networkInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/progressBar"
-            android:layout_marginLeft="20dp"
-            android:text="@string/progress0"
-            android:textColor="@color/Shakespeare"
-            android:textSize="16dp"
-            android:translationX="20dp" />
+            android:layout_below="@id/header"
+            android:layout_marginTop="0dp">
+            <!--<TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/networkName"
+                android:text="Network Name Here"
+                android:textSize="20dp"
+                android:layout_centerInParent="true"/>-->
 
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/progressbarspinner"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="#FFFFFF"
-            android:src="@drawable/wait"
-            android:tint="@color/Shakespeare"
-            android:translationX="15dp"
-            android:translationY="41dp" />
+        </RelativeLayout>
 
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/paymentMessage"
-        android:layout_below="@id/progress"
-        android:layout_margin="10dp"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone">
-        <TextView
-            android:layout_margin="10dp"
+        <RelativeLayout
+            android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/message1c"
-            android:textStyle="bold"/>
+            android:layout_below="@id/networkInfo"
+            android:layout_marginTop="20dp">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:progressTint="@color/Shakespeare" />
+
+
+            <TextView
+                android:id="@+id/progressStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/progressBar"
+                android:layout_marginLeft="20dp"
+                android:text="@string/progress0"
+                android:textColor="@color/Shakespeare"
+                android:textSize="16dp"
+                android:translationX="20dp" />
+
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/progressbarspinner"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="#FFFFFF"
+                android:src="@drawable/wait"
+                android:tint="@color/Shakespeare"
+                android:translationX="15dp"
+                android:translationY="41dp" />
+
+
+        </RelativeLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:id="@+id/paymentMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <Button
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:id="@+id/positiveButton"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="YES"
-                />
-            <Button
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:id="@+id/negativeButton"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="NO"/>
-            <Button
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:id="@+id/learnMore"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="LEARN MORE"/>
+            android:layout_below="@id/progress"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/message1c"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/positiveButton"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="YES" />
+
+                <Button
+                    android:id="@+id/negativeButton"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="NO" />
+
+                <Button
+                    android:id="@+id/learnMore"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="LEARN MORE" />
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
+        <ListView
+            android:id="@+id/hostData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/paymentbuttonlayout"
+            android:layout_below="@id/paymentMessage"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
 
 
-    <ListView
-        android:id="@+id/hostData"
-        android:layout_width="wrap_content"
-
-        android:layout_height="450dp"
-        android:layout_below="@id/paymentMessage"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="10dp"
-
-        >
+            >
 
 
+        </ListView>
+
+        <LinearLayout
+            android:id="@+id/paymentbuttonlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/continuetopayment"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/hostData"
 
 
-    </ListView>
+                android:background="@color/Grey"
+                android:text="Continue"
+                android:textColor="@color/White"
+                android:textSize="20dp" />
 
+        </LinearLayout>
 
-    <LinearLayout
-        android:orientation  ="horizontal"
-        android:layout_width ="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
-      >
-        <Button
-            android:id="@+id/continuetopayment"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:layout_below="@+id/hostData"
-
-
-
-
-
-            android:background="@color/Grey"
-            android:text="Continue"
-            android:textColor="@color/White"
-            android:textSize="20dp" />
-
-    </LinearLayout>
-
-
-
+    </RelativeLayout>
 </RelativeLayout>

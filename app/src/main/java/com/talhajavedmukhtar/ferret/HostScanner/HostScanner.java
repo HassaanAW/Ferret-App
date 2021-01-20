@@ -51,7 +51,7 @@ public class HostScanner extends AsyncTask {
         context = ctx;
 
         myApp = (MyApp) ctx.getApplicationContext();
-
+        // discovery process
         discoveryInterface = new DiscoveryInterface() {
             @Override
             public void onHostDiscovered(String ipAd, String protocol) {
@@ -77,13 +77,13 @@ public class HostScanner extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         ArrayList<AsyncTask> tasks = new ArrayList<>();
-
+        // discovery task 1
         TCPSYNDiscoverer tcpsynDiscoverer = new TCPSYNDiscoverer(networkAddress,networkSize,timeout,noOfThreads);
         tcpsynDiscoverer.setDiscoveryInterface(discoveryInterface);
-
+        // discovery task 2
         ICMPPingDiscoverer icmpPingDiscoverer = new ICMPPingDiscoverer(networkAddress,networkSize,timeout,noOfThreads);
         icmpPingDiscoverer.setDiscoveryInterface(discoveryInterface);
-
+        // discovery task 3
         MDNSDiscoverer mdnsDiscoverer = new MDNSDiscoverer(context,timeout);
         mdnsDiscoverer.setDiscoveryInterface(discoveryInterface);
 

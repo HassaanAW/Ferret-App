@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -14,6 +15,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -71,7 +74,7 @@ public class ScanActivity extends AppCompatActivity {
     private int portsScanned;
 
     private ArrayList<DataItem> allData;
-    private HashMap<String,ArrayList<Integer>> ipToPortsData;
+    private HashMap<String, ArrayList<Integer>> ipToPortsData;
 
     private Context context;
 
@@ -81,10 +84,10 @@ public class ScanActivity extends AppCompatActivity {
 
     public static Handler UIHandler;
 
-    static
-    {
+    static {
         UIHandler = new Handler(Looper.getMainLooper());
     }
+
     public static void runOnUI(Runnable runnable) {
         UIHandler.post(runnable);
     }
@@ -117,7 +120,7 @@ public class ScanActivity extends AppCompatActivity {
         String networkAddress = Utils.getNetworkAddress(this);
         int networkSize = Utils.getNetworkSize(this);
 
-        final HostAdapter hostAdapter = new HostAdapter(hosts,this);
+        final HostAdapter hostAdapter = new HostAdapter(hosts, this);
 
         hostView.setAdapter(hostAdapter);
 
@@ -128,9 +131,10 @@ public class ScanActivity extends AppCompatActivity {
 
         createNotificationChannel();
 
-        threadsExecutor = new ThreadPoolExecutor(20,20,20000, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<Runnable>(), new ThreadPoolExecutor.CallerRunsPolicy());
+        threadsExecutor = new ThreadPoolExecutor(20, 20, 20000, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(), new ThreadPoolExecutor.CallerRunsPolicy());
 
-        HostScanner hostScanner = new HostScanner(this,networkAddress,networkSize,50,10000);
+        // Discovery process start
+        HostScanner hostScanner = new HostScanner(this, networkAddress, networkSize, 50, 10000);
         hostScanner.setScannerInterface(new ScannerInterface() {
             @Override
             public void onDeviceFound(final Host h) {
@@ -143,11 +147,11 @@ public class ScanActivity extends AppCompatActivity {
                     }
                 });
 
-                Log.d(TAG,"Host Found: "+h.getIpAddress());
+                Log.d(TAG, "Host Found: " + h.getIpAddress());
 
                 final int index = hosts.indexOf(h);
 
-                NameGrabber nameGrabber = new NameGrabber(h,context);
+                NameGrabber nameGrabber = new NameGrabber(h, context);
                 nameGrabber.setNameGrabInterface(new NameGrabInterface() {
                     @Override
                     public void onGrab(String name, String protocol) {
@@ -163,7 +167,7 @@ public class ScanActivity extends AppCompatActivity {
 
                     @Override
                     public void onCompletion() {
-                        if (hosts.get(index).getDeviceName().equals("...")){
+                        if (hosts.get(index).getDeviceName().equals("...")) {
                             hosts.get(index).setDeviceName("Unknown Name");
                         }
 
@@ -179,12 +183,12 @@ public class ScanActivity extends AppCompatActivity {
                 nameGrabber.executeOnExecutor(threadsExecutor);
 
                 //Start Vulnerability Finder
-                final VulnerabilityFinder vulnerabilityFinder = new VulnerabilityFinder(context,h);
+                final VulnerabilityFinder vulnerabilityFinder = new VulnerabilityFinder(context, h);
                 FinderInterface finderInterface = new FinderInterface() {
                     @Override
                     public void onCompletion(DataItem dataItem) {
                         Boolean vulnerable = dataItem.vulnerable;
-                        Log.d(TAG,"IP: "+h.getIpAddress() + " Vulnerable: "+vulnerable);
+                        Log.d(TAG, "IP: " + h.getIpAddress() + " Vulnerable: " + vulnerable);
                         int index = hosts.indexOf(h);
                         hosts.get(index).setVulnerable(vulnerable);
                         hosts.get(index).setIdentDescs(vulnerabilityFinder.getIdentDescs());
@@ -198,13 +202,15 @@ public class ScanActivity extends AppCompatActivity {
 
                         allData.add(dataItem);
 
-                        synchronized (context){
+                        synchronized (context) {
                             vulnerabilityChecked += 1;
                             updateProgressDetailed();
 
-                            Log.d(TAG,"Vulnerabilities Checked for: "+ Integer.toString(vulnerabilityChecked) + " devices");
+                            Log.d(TAG, "Vulnerabilities Checked for: " + Integer.toString(vulnerabilityChecked) + " devices");
 
-                            if(hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())){
+//                            if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
+                            if (hostScanEnded && (vulnerabilityChecked == hosts.size())) {
+
                                 //Vulnerabilities checked
                                 /*
                                 Log.d(TAG,"Vulnerability Checks ended; About to push data");
@@ -213,7 +219,7 @@ public class ScanActivity extends AppCompatActivity {
 
                                 saveData();
                                 updateProgress(4);
-                                Log.d(TAG,"Data saved from VF");
+                                Log.d(TAG, "Data saved from VF");
                             }
 
                         }
@@ -229,10 +235,10 @@ public class ScanActivity extends AppCompatActivity {
                     @Override
                     public void onPortFound(int port) {
                         String ip = h.getIpAddress();
-                        if(ipToPortsData.containsKey(ip)){
+                        if (ipToPortsData.containsKey(ip)) {
                             ipToPortsData.get(ip).add(port);
-                        }else{
-                            ipToPortsData.put(ip,new ArrayList<Integer>());
+                        } else {
+                            ipToPortsData.put(ip, new ArrayList<Integer>());
                         }
                     }
 
@@ -241,13 +247,14 @@ public class ScanActivity extends AppCompatActivity {
                         synchronized (context) {
                             portsScanned += 1;
                             updateProgressDetailed();
-                            Log.d(TAG,"Ports Scanned for: "+ Integer.toString(portsScanned) + " devices");
+                            Log.d(TAG, "Ports Scanned for: " + Integer.toString(portsScanned) + " devices");
 
-                            if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
+//                            if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
+                            if (hostScanEnded && (vulnerabilityChecked == hosts.size())) {
 
                                 saveData();
                                 updateProgress(4);
-                                Log.d(TAG,"Data saved from PS");
+                                Log.d(TAG, "Data saved from PS");
                             }
                         }
                     }
@@ -265,9 +272,10 @@ public class ScanActivity extends AppCompatActivity {
             @Override
             public void onCompletion() {
                 Log.d(TAG, "getting into onCompletion function");
-                ArrayList<Host> additionalHosts = Utils.getRemainingHostsFromARP(hosts,context);
-                for(final Host h: additionalHosts){
-                    Log.d(TAG,"Additional Host Found: "+ h.getIpAddress());
+                ArrayList<Host> additionalHosts = Utils.getRemainingHostsFromARP(hosts, context);
+                // All hosts found /discovered at this point
+                for (final Host h : additionalHosts) {
+                    Log.d(TAG, "Additional Host Found: " + h.getIpAddress());
                     hosts.add(h);
 
                     ScanActivity.runOnUI(new Runnable() {
@@ -277,11 +285,11 @@ public class ScanActivity extends AppCompatActivity {
                         }
                     });
 
-                    Log.d(TAG,"Host Found: "+h.getIpAddress());
+                    Log.d(TAG, "Host Found: " + h.getIpAddress());
 
                     final int index = hosts.indexOf(h);
-
-                    NameGrabber nameGrabber = new NameGrabber(h,context);
+                    //Grabbing Name via host ip
+                    NameGrabber nameGrabber = new NameGrabber(h, context);
                     nameGrabber.setNameGrabInterface(new NameGrabInterface() {
                         @Override
                         public void onGrab(String name, String protocol) {
@@ -297,7 +305,7 @@ public class ScanActivity extends AppCompatActivity {
 
                         @Override
                         public void onCompletion() {
-                            if (!hosts.get(index).getDeviceName().equals("...")){
+                            if (!hosts.get(index).getDeviceName().equals("...")) {
                                 hosts.get(index).setDeviceName("Unknown Name");
                             }
 
@@ -312,12 +320,13 @@ public class ScanActivity extends AppCompatActivity {
                     //nameGrabber.executeOnExecutor(io.fabric.sdk.android.services.concurrency.AsyncTask.THREAD_POOL_EXECUTOR);
                     nameGrabber.executeOnExecutor(threadsExecutor);
 
-                    final VulnerabilityFinder vulnerabilityFinder = new VulnerabilityFinder(context,h);
+                    // Vulneriability finder start
+                    final VulnerabilityFinder vulnerabilityFinder = new VulnerabilityFinder(context, h);
                     FinderInterface finderInterface = new FinderInterface() {
                         @Override
                         public void onCompletion(DataItem dataItem) {
                             Boolean vulnerable = dataItem.vulnerable;
-                            Log.d(TAG,"IP: "+h.getIpAddress() + " Vulnerable: "+vulnerable);
+                            Log.d(TAG, "IP: " + h.getIpAddress() + " Vulnerable: " + vulnerable);
                             int index = hosts.indexOf(h);
                             hosts.get(index).setVulnerable(vulnerable);
                             hosts.get(index).setIdentDescs(vulnerabilityFinder.getIdentDescs());
@@ -331,12 +340,15 @@ public class ScanActivity extends AppCompatActivity {
 
                             allData.add(dataItem);
 
-                            synchronized (context){
+                            synchronized (context) {
                                 vulnerabilityChecked += 1;
                                 updateProgressDetailed();
-                                Log.d(TAG,"Vulnerabilities Checked for: "+ Integer.toString(vulnerabilityChecked) + " devices");
+                                Log.d(TAG, "Vulnerabilities Checked for: " + Integer.toString(vulnerabilityChecked) + " devices");
 
-                                if(hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())){
+//                                if(hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())){
+
+                                if (hostScanEnded && (vulnerabilityChecked == hosts.size())) {
+
                                     //Vulnerabilities checked
                                     /*
                                     Log.d(TAG,"Vulnerability Checks ended; About to push data");
@@ -344,10 +356,9 @@ public class ScanActivity extends AppCompatActivity {
                                     dataHandler.pushData(allData);*/
 
 
-
                                     saveData();
                                     updateProgress(4);
-                                    Log.d(TAG,"Data saved from VF");
+                                    Log.d(TAG, "Data saved from VF");
                                 }
                             }
                         }
@@ -357,15 +368,16 @@ public class ScanActivity extends AppCompatActivity {
                     vulnerabilityFinder.executeOnExecutor(threadsExecutor);
 
                     //Start Port Scan
+
                     PortScanner portScanner = new PortScanner(h.getIpAddress());
                     PortScannerInterface portScannerInterface = new PortScannerInterface() {
                         @Override
                         public void onPortFound(int port) {
                             String ip = h.getIpAddress();
-                            if(ipToPortsData.containsKey(ip)){
+                            if (ipToPortsData.containsKey(ip)) {
                                 ipToPortsData.get(ip).add(port);
-                            }else{
-                                ipToPortsData.put(ip,new ArrayList<Integer>());
+                            } else {
+                                ipToPortsData.put(ip, new ArrayList<Integer>());
                             }
                         }
 
@@ -374,14 +386,15 @@ public class ScanActivity extends AppCompatActivity {
                             synchronized (context) {
                                 portsScanned += 1;
                                 updateProgressDetailed();
-                                Log.d(TAG,"Ports Scanned for: "+ Integer.toString(portsScanned) + " devices");
+                                Log.d(TAG, "Ports Scanned for: " + Integer.toString(portsScanned) + " devices");
 
-                                if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
+//                                if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
+                                if (hostScanEnded && (vulnerabilityChecked == hosts.size())) {
 
                                     saveData();
                                     updateProgress(4);
 
-                                    Log.d(TAG,"Data saved from PS");
+                                    Log.d(TAG, "Data saved from PS");
                                 }
                             }
                         }
@@ -396,13 +409,13 @@ public class ScanActivity extends AppCompatActivity {
                     portScanner.executeOnExecutor(threadsExecutor);
                 }
 
-                Log.d(TAG,"Host Scanning Done!");
+                Log.d(TAG, "Host Scanning Done!");
                 hostScanEnded = true;
 
-                if(hosts.size() == 0){
+                if (hosts.size() == 0) {
                     updateProgress(4);
                     //No hosts found
-                }else{
+                } else {
                     //in vulnerability checking phase
                     updateProgress(2);
                 }
@@ -420,7 +433,7 @@ public class ScanActivity extends AppCompatActivity {
     protected void onStart() {
         userAway = false;
 
-        if(notificationFired){
+        if (notificationFired) {
             NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(NOTIFICATION_ID);
             notificationFired = false;
@@ -442,8 +455,8 @@ public class ScanActivity extends AppCompatActivity {
         Log.d(TAG, "activity restarted");
         super.onRestart();
 
-        if(MyApp.PaymentQuestionSeen()){
-            if(!MyApp.PaymentDataCollected()){
+        if (MyApp.PaymentQuestionSeen()) {
+            if (!MyApp.PaymentDataCollected()) {
                 final LinearLayout paymentMessage = findViewById(R.id.paymentMessage);
                 paymentMessage.setVisibility(View.VISIBLE);
 
@@ -463,7 +476,7 @@ public class ScanActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         DataHandler dataHandler = new DataHandler(getApplicationContext());
-                        dataHandler.pushPaymentData("Not Interested",MyApp.getLastTimeStamp());
+                        dataHandler.pushPaymentData("Not Interested", MyApp.getLastTimeStamp());
                         paymentMessage.setVisibility(View.GONE);
                         Intent intent = new Intent(getApplicationContext(), InstructionsActivity.class);
                         startActivity(intent);
@@ -476,7 +489,7 @@ public class ScanActivity extends AppCompatActivity {
                         openPaymentActivity();
                     }
                 });
-            }else{
+            } else {
                 //jump to Port Scan Activity
                 //goToPortScanActivity();
                 finish();
@@ -491,13 +504,11 @@ public class ScanActivity extends AppCompatActivity {
     }
 
 
-
-
-    private void updateProgress(final int progress){
+    private void updateProgress(final int progress) {
         ScanActivity.runOnUI(new Runnable() {
             @Override
             public void run() {
-                switch (progress){
+                switch (progress) {
                     case 0:
                         progressBar.setProgress(0);
                         progressStatus.setText(Constants.PROGRESS0);
@@ -519,12 +530,12 @@ public class ScanActivity extends AppCompatActivity {
                         progressBar.setProgress(120);
 
                         int vulnDevices = getNoOfVulnDevices();
-                        if(vulnDevices == 0){
+                        if (vulnDevices == 0) {
                             progressStatus.setText(Constants.PROGRESS4A);
                             progressStatus.setTextColor(Color.parseColor("#4CAF50"));
 
-                        }else{
-                            progressStatus.setText(Integer.toString(vulnDevices)+Constants.PROGRESS4B);
+                        } else {
+                            progressStatus.setText(Integer.toString(vulnDevices) + Constants.PROGRESS4B);
                             progressStatus.setTextColor(Color.parseColor("#f44336"));
                         }
                         clickDeviceDetails();
@@ -536,16 +547,16 @@ public class ScanActivity extends AppCompatActivity {
         });
     }
 
-    private void updateProgressDetailed(){
+    private void updateProgressDetailed() {
         ScanActivity.runOnUI(new Runnable() {
             @Override
             public void run() {
-                if(progressBar.getProgress() >= 80){
-                    int progress = 80 + (((vulnerabilityChecked+portsScanned)*40/(2*hosts.size())));
-                    Log.d(TAG,"New progress: "+Integer.toString(progress));
+                if (progressBar.getProgress() >= 80) {
+                    int progress = 80 + (((vulnerabilityChecked + portsScanned) * 40 / (2 * hosts.size())));
+                    Log.d(TAG, "New progress: " + Integer.toString(progress));
 
 
-                        progressBar.setProgress(progress);
+                    progressBar.setProgress(progress);
 
 
                 }
@@ -553,12 +564,12 @@ public class ScanActivity extends AppCompatActivity {
         });
     }
 
-    private void saveData(){
-        for(DataItem d: allData){
+    private void saveData() {
+        for (DataItem d : allData) {
             String ip = d.getHost().getIpAddress();
-            if (ipToPortsData.containsKey(ip)){
+            if (ipToPortsData.containsKey(ip)) {
                 d.setOpenPorts(ipToPortsData.get(ip));
-            }else{
+            } else {
                 d.setOpenPorts(new ArrayList<Integer>());
             }
         }
@@ -567,25 +578,27 @@ public class ScanActivity extends AppCompatActivity {
         dataHandler.pushData(allData);
 
         ArrayList<String> ips = new ArrayList<>();
-        for(int i = 0; i < hosts.size(); i++){
+        for (int i = 0; i < hosts.size(); i++) {
             ips.add(hosts.get(i).getIpAddress());
         }
         MyApp.setIpsForPortScan(ips);
 
 
-
-
-
-
-
     }
-
 
 
     private void scanDoneScreen() {
         hostView.setAlpha(1f);
         final GifImageView loadingImage = (GifImageView) findViewById(R.id.progressbarspinner);
-        loadingImage.setImageResource( R.drawable.loading_done_tick);
+        loadingImage.setImageResource(R.drawable.loading_done_tick);
+
+        if (getNoOfVulnDevices() > 0) {
+            ImageViewCompat.setImageTintList(loadingImage, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.Blood)));
+        } else {
+            ImageViewCompat.setImageTintList(loadingImage, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.Grass)));
+
+
+        }
 
         continuetopayment = findViewById(R.id.continuetopayment);
         continuetopayment.setBackgroundColor(Color.parseColor("#000000"));
@@ -598,35 +611,33 @@ public class ScanActivity extends AppCompatActivity {
         });
     }
 
-    private void clickDeviceDetails()
-    {
+    private void clickDeviceDetails() {
         hostView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d(TAG,"in click listener before");
+                Log.d(TAG, "in click listener before");
 
                 Host currhost = hosts.get(i);
-                Intent intent = new Intent(getApplicationContext(),HostDataActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HostDataActivity.class);
 
-                intent.putExtra("vendor",currhost.getVendor());
-                intent.putExtra("name",currhost.getDeviceName());
-                intent.putExtra("ip",currhost.getIpAddress());
-                intent.putExtra("vulnerable",currhost.getVulnerable());
+                intent.putExtra("vendor", currhost.getVendor());
+                intent.putExtra("name", currhost.getDeviceName());
+                intent.putExtra("ip", currhost.getIpAddress());
+                intent.putExtra("vulnerable", currhost.getVulnerable());
 
-                Log.d(TAG,currhost.getVendor());
-                Log.d(TAG,currhost.getDeviceName());
-                Log.d(TAG,currhost.getIpAddress());
-                Log.d(TAG,Boolean.toString(currhost.getVulnerable()));
+                Log.d(TAG, currhost.getVendor());
+                Log.d(TAG, currhost.getDeviceName());
+                Log.d(TAG, currhost.getIpAddress());
+                Log.d(TAG, Boolean.toString(currhost.getVulnerable()));
                 int num_of_vulns = 0;
                 CVESearcher.Tuple ident_descs = currhost.getIdentDescs();
-                if (ident_descs != null && ident_descs.x != null && ident_descs.y != null)
-                {
+                if (ident_descs != null && ident_descs.x != null && ident_descs.y != null) {
                     ArrayList<String> idents = (ArrayList<String>) ident_descs.x;
                     ArrayList<String> descs = (ArrayList<String>) ident_descs.y;
                     num_of_vulns = idents.size();
 
-                    intent.putExtra("idents",idents);
-                    intent.putExtra("descs",descs);
+                    intent.putExtra("idents", idents);
+                    intent.putExtra("descs", descs);
 
 //                    for (int j = 0; j < idents.size();j++)
 //                    {
@@ -634,10 +645,10 @@ public class ScanActivity extends AppCompatActivity {
 //                    }
                 }
 
-                intent.putExtra("numofvulnerable",num_of_vulns);
+                intent.putExtra("numofvulnerable", num_of_vulns);
 
 
-                Log.d(TAG,"in click listener after");
+                Log.d(TAG, "in click listener after");
 
 
                 startActivity(intent);
@@ -661,39 +672,39 @@ public class ScanActivity extends AppCompatActivity {
     }*/
 
 
-    private void goToPortScanActivity(){
+    private void goToPortScanActivity() {
         Intent intent = new Intent(this, PortScanActivity.class);
 
         String[] addresses = new String[hosts.size()];
 
-        for(int i = 0; i < hosts.size(); i++){
+        for (int i = 0; i < hosts.size(); i++) {
             addresses[i] = hosts.get(i).getIpAddress();
         }
-        intent.putExtra("hosts",addresses);
+        intent.putExtra("hosts", addresses);
 
         startActivity(intent);
     }
 
-    private void openPaymentActivity(){
+    private void openPaymentActivity() {
         Boolean vulnerable = isNetworkVulnerable();
 
-        if(userAway){
+        if (userAway) {
             pushNotification(vulnerable);
-        }else{
+        } else {
             //
 
             Intent intent = new Intent(this, PaymentActivity.class);
-            intent.putExtra("vulnerable",vulnerable);
+            intent.putExtra("vulnerable", vulnerable);
 
             startActivity(intent);
         }
     }
 
-    private Boolean isNetworkVulnerable(){
+    private Boolean isNetworkVulnerable() {
         Boolean vulnerable = false;
 
-        for(DataItem d: allData){
-            if (d.vulnerable){
+        for (DataItem d : allData) {
+            if (d.vulnerable) {
                 vulnerable = true;
             }
         }
@@ -701,11 +712,11 @@ public class ScanActivity extends AppCompatActivity {
         return vulnerable;
     }
 
-    private int getNoOfVulnDevices(){
+    private int getNoOfVulnDevices() {
         int vulnerable = 0;
 
-        for(DataItem d: allData){
-            if (d.vulnerable){
+        for (DataItem d : allData) {
+            if (d.vulnerable) {
                 vulnerable += 1;
             }
         }
@@ -713,18 +724,18 @@ public class ScanActivity extends AppCompatActivity {
         return vulnerable;
     }
 
-    private void pushNotification(Boolean vulnerable){
+    private void pushNotification(Boolean vulnerable) {
         String content;
-        if(vulnerable){
+        if (vulnerable) {
             content = getResources().getString(R.string.message1a) + " " + getResources().getString(R.string.message1c);
-        }else{
+        } else {
             content = getResources().getString(R.string.message1b) + " " + getResources().getString(R.string.message1c);
         }
 
         Intent intent = new Intent(this, PaymentActivity.class);
-        intent.putExtra("vulnerable",vulnerable);
+        intent.putExtra("vulnerable", vulnerable);
         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,intent,0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.logo)

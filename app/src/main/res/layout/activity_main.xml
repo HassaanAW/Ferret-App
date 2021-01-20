@@ -44,13 +44,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_description"/>
+
         <Button
+            android:id="@+id/beginButton"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:gravity="center"
-            android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/beginButton"
-            android:text="BEGIN!"/>
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:text="BEGIN!" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

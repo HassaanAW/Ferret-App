@@ -34,33 +34,33 @@ import static android.content.Context.WIFI_SERVICE;
 public class Utils {
     private static String TAG = Tags.makeTag("Utils");
 
-    private static ArrayList<String> generateAddresses(String[] octetArray, int octetNo, int intFromOctet){
+    private static ArrayList<String> generateAddresses(String[] octetArray, int octetNo, int intFromOctet) {
         ArrayList<String> adds = new ArrayList<>();
 
-        switch (octetNo){
+        switch (octetNo) {
             case 1:
-                for(int i = 0; i < 256; i++){
+                for (int i = 0; i < 256; i++) {
                     octetArray[3] = Integer.toString(i);
-                    adds.add(TextUtils.join(".",octetArray));
+                    adds.add(TextUtils.join(".", octetArray));
                 }
                 return adds;
             case 2:
-                for(int i = 0; i < 256; i++){
-                    for(int j = 0; j < 256; j++){
+                for (int i = 0; i < 256; i++) {
+                    for (int j = 0; j < 256; j++) {
                         octetArray[2] = Integer.toString(i);
                         octetArray[3] = Integer.toString(j);
-                        adds.add(TextUtils.join(".",octetArray));
+                        adds.add(TextUtils.join(".", octetArray));
                     }
                 }
                 return adds;
             case 3:
-                for(int i = 0; i < 256; i++){
-                    for(int j = 0; j < 256; j++){
-                        for(int k = 0; k < 256; k++){
+                for (int i = 0; i < 256; i++) {
+                    for (int j = 0; j < 256; j++) {
+                        for (int k = 0; k < 256; k++) {
                             octetArray[1] = Integer.toString(i);
                             octetArray[2] = Integer.toString(j);
                             octetArray[3] = Integer.toString(k);
-                            adds.add(TextUtils.join(".",octetArray));
+                            adds.add(TextUtils.join(".", octetArray));
                         }
                     }
                 }
@@ -70,7 +70,7 @@ public class Utils {
         }
     }
 
-    public static ArrayList<String> getAddressRange(String ip, int cidr){
+    public static ArrayList<String> getAddressRange(String ip, int cidr) {
         //double numHosts = Math.pow(2,(32 - cidr));
 
         //hardcode Network Size to always be 24
@@ -80,7 +80,7 @@ public class Utils {
         ArrayList<String> addresses = new ArrayList<>();
 
         int octet = 0;
-        while(hostBits > 8){
+        while (hostBits > 8) {
             hostBits -= 8;
             octet += 1;
         }
@@ -92,7 +92,7 @@ public class Utils {
 
         //initial octet after applying subnet mask
         int pointer = oct.length() - 1;
-        for(int i = 0; i < hostBits && pointer != -1; i++){
+        for (int i = 0; i < hostBits && pointer != -1; i++) {
             char[] octChars = oct.toCharArray();
             octChars[pointer] = '0';
             oct = String.valueOf(octChars);
@@ -100,18 +100,18 @@ public class Utils {
         }
 
 
-        for(int i = 0; i <= Math.pow(2,hostBits)-1; i++){
+        for (int i = 0; i <= Math.pow(2, hostBits) - 1; i++) {
             String hostPart = Integer.toBinaryString(i);
             //adding this host to the masked ip
             String updatedOctet;
-            try{
-                updatedOctet = oct.substring(0,oct.length()-hostPart.length()) + hostPart;
-            }catch (Exception ex){
+            try {
+                updatedOctet = oct.substring(0, oct.length() - hostPart.length()) + hostPart;
+            } catch (Exception ex) {
                 updatedOctet = hostPart;
             }
 
-            int intFromOctet = Integer.parseInt(updatedOctet,2);
-            octetArray[3-octet] = Integer.toString(intFromOctet);
+            int intFromOctet = Integer.parseInt(updatedOctet, 2);
+            octetArray[3 - octet] = Integer.toString(intFromOctet);
 
             //Commented out the code for networks larger than /24 because it causes OOM error in some devices
             /*
@@ -124,59 +124,59 @@ public class Utils {
             }*/
 
             //For now just dealing with first 256 addresses will do.
-            addresses.add(TextUtils.join(".",octetArray));
+            addresses.add(TextUtils.join(".", octetArray));
         }
         //allHosts = addresses;
         return addresses;
     }
 
 
-    public static String getNetworkAddress(Context context){
+    public static String getNetworkAddress(Context context) {
         WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
 
-        try{
+        try {
             DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
             int gatewayInt = dhcpInfo.gateway;
             return (gatewayInt & 0xFF) + "." +
                     ((gatewayInt >>>= 8) & 0xFF) + "." +
                     ((gatewayInt >>>= 8) & 0xFF) + "." +
                     ((gatewayInt >>>= 8) & 0xFF);
-        }catch (Exception ex){
-            try{
+        } catch (Exception ex) {
+            try {
                 return Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
-            }catch (Exception exception){
+            } catch (Exception exception) {
                 return "0.0.0.0";
             }
         }
     }
 
-    public static int getNetworkSize(Context context){
+    public static int getNetworkSize(Context context) {
         WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(WIFI_SERVICE);
 
-        try{
+        try {
             DhcpInfo dhcpInfo = wifiManager.getDhcpInfo();
             int i = dhcpInfo.netmask;
 
             ArrayList<String> octets = new ArrayList<>();
             octets.add(Integer.toBinaryString(i & 0xFF));
 
-            for(int j = 1; j < 4; j++){
+            for (int j = 1; j < 4; j++) {
                 octets.add(Integer.toBinaryString((i >>>= 8) & 0xFF));
             }
 
             int CIDR = 0;
 
 
-            for (String octet: octets){
-                if (octet.equals("11111111")){
+            for (String octet : octets) {
+                if (octet.equals("11111111")) {
                     CIDR += 8;
-                }else{
+                } else {
                     int numOfOnes = 0;
 
-                    for(int j = 0; j < 8; j++){
-                        if(octet.charAt(j) == '1'){
+                    for (int j = 0; j < 8; j++) {
+                        if (octet.charAt(j) == '1') {
                             numOfOnes += 1;
-                        }else {
+                        } else {
                             break;
                         }
                     }
@@ -186,12 +186,12 @@ public class Utils {
             }
 
             return CIDR;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return 24;
         }
     }
 
-    public static String getMACAddress(String ipAd){
+    public static String getMACAddress(String ipAd) {
         String NEIGHBOR_INCOMPLETE = "INCOMPLETE";
         String NEIGHBOR_FAILED = "FAILED";
         BufferedReader bufferedReader = null;
@@ -220,28 +220,28 @@ public class Utils {
                     continue;
                 }
 
-                    String ip = splitted[0];
+                String ip = splitted[0];
 
                 InetAddress addr = InetAddress.getByName(ip);
                 if (addr.isLinkLocalAddress() || addr.isLoopbackAddress()) {
                     continue;
                 }
-                    String mac = splitted[4];
-                    String state = splitted[splitted.length - 1];
+                String mac = splitted[4];
+                String state = splitted[splitted.length - 1];
 //                    Log.d("IP", "ip: " + ip);
 //                    Log.d("Mac", "mac: " + mac);
 
 
 //                    String mac = splitted[3];
-                    if (!NEIGHBOR_FAILED.equals(state) && !NEIGHBOR_INCOMPLETE.equals(state)) {
-                        if (mac.matches("..:..:..:..:..:..")) {
-                            if (!mac.equals("00:00:00:00:00:00")) {
-                                if (ip.equals(ipAd)) {
-                                    return mac;
-                                }
+                if (!NEIGHBOR_FAILED.equals(state) && !NEIGHBOR_INCOMPLETE.equals(state)) {
+                    if (mac.matches("..:..:..:..:..:..")) {
+                        if (!mac.equals("00:00:00:00:00:00")) {
+                            if (ip.equals(ipAd)) {
+                                return mac;
                             }
                         }
                     }
+                }
 
             }
         } catch (Exception e) {
@@ -252,10 +252,10 @@ public class Utils {
 //        catch (IOException e) {
 ////            e.printStackTrace();
 //        }
-        finally{
+        finally {
             try {
-                if(bufferedReader != null)
-                  bufferedReader.close();
+                if (bufferedReader != null)
+                    bufferedReader.close();
             } catch (IOException e) {
                 //e.printStackTrace();
             }
@@ -264,11 +264,11 @@ public class Utils {
         return null;
     }
 
-    public static ArrayList<Host> getRemainingHostsFromARP(ArrayList<Host> discovered, Context context){
+    public static ArrayList<Host> getRemainingHostsFromARP(ArrayList<Host> discovered, Context context) {
         ArrayList<Host> additionalHosts = new ArrayList<>();
 
         ArrayList<String> ipAddresses = new ArrayList<>();
-        for(Host h: discovered){
+        for (Host h : discovered) {
             ipAddresses.add(h.getIpAddress());
         }
 
@@ -315,20 +315,20 @@ public class Utils {
                 if (!NEIGHBOR_FAILED.equals(state) && !NEIGHBOR_INCOMPLETE.equals(state)) {
                     if (mac.matches("..:..:..:..:..:..")) {
                         if (!mac.equals("00:00:00:00:00:00")) {
-                            if(!ipAddresses.contains(ip)){
+                            if (!ipAddresses.contains(ip)) {
                                 String vendor;
-                                try{
+                                try {
                                     vendor = myApp.getMap().findVendor(mac);
-                                }catch (Exception ex){
+                                } catch (Exception ex) {
                                     vendor = "Unknown";
                                 }
 
                                 String name;
                                 byte[] address = getBytesFromString(ip);
 
-                                try{
+                                try {
                                     InetAddress inetAddress = InetAddress.getByAddress(address);
-                                    Log.d(TAG,"Passed this");
+                                    Log.d(TAG, "Passed this");
 
                                     /*Boolean reachable = inetAddress.isReachable(1000);
 
@@ -339,7 +339,7 @@ public class Utils {
                                     }*/
 
                                     name = inetAddress.getCanonicalHostName();
-                                }catch (Exception ex){
+                                } catch (Exception ex) {
                                     //Log.d(TAG,"Other");
                                     name = "Unknown Name";
                                 }
@@ -354,7 +354,7 @@ public class Utils {
 
                                 newHost.setMAhash(md5(mac));
 
-                                MyApp.addDeviceDetails(ip,mac,vendor);
+                                MyApp.addDeviceDetails(ip, mac, vendor);
 
                                 additionalHosts.add(newHost);
                             }
@@ -365,7 +365,6 @@ public class Utils {
             }
 
 
-
         } catch (Exception e) {
 //            e.printStackTrace();
 //            System.out.println(e.getMessage());
@@ -374,16 +373,16 @@ public class Utils {
 //        catch (IOException e) {
 ////            e.printStackTrace();
 //        }
-        finally{
+        finally {
             try {
-                if(bufferedReader != null)
+                if (bufferedReader != null)
                     bufferedReader.close();
             } catch (IOException e) {
                 //e.printStackTrace();
             }
         }
 
-            //old arp code
+        //old arp code
 //        BufferedReader bufferedReader = null;
 //        try {
 //            bufferedReader = new BufferedReader(new FileReader("/proc/net/arp"));
@@ -460,7 +459,7 @@ public class Utils {
         return additionalHosts;
     }
 
-    public static String getProductFromBanner(Banner b){
+    public static String getProductFromBanner(Banner b) {
         String protocol = b.getProtocol();
         String banner = b.getText();
 
@@ -476,31 +475,31 @@ public class Utils {
             if (protocol.equals(Constants.UPNP)) {
                 return extractUPNPProduct(banner);
             }
-        }catch (Exception ex){
-            Log.d(TAG,ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(TAG, ex.getMessage());
         }
 
         return null;
     }
 
-    public static String getVersionFromBanner(Banner b){
+    public static String getVersionFromBanner(Banner b) {
         String protocol = b.getProtocol();
         String banner = b.getText();
 
         try {
-            if(protocol.equals(Constants.SSH)){
+            if (protocol.equals(Constants.SSH)) {
                 return extractSSHVersion(banner);
             }
 
-            if(protocol.equals(Constants.HTTP)){
+            if (protocol.equals(Constants.HTTP)) {
                 return extractHTTPVersion(banner);
             }
 
-            if(protocol.equals(Constants.UPNP)){
+            if (protocol.equals(Constants.UPNP)) {
                 return extractUPNPVersion(banner);
             }
-        }catch (Exception ex){
-            Log.d(TAG,ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(TAG, ex.getMessage());
         }
 
 
@@ -508,98 +507,98 @@ public class Utils {
     }
 
     //SSH
-    private static String extractSSHProduct(String banner){
-        try{
+    private static String extractSSHProduct(String banner) {
+        try {
             String product = banner.split("\n")[0];
 
-            Log.d(TAG,"Doing regex on: "+product);
+            Log.d(TAG, "Doing regex on: " + product);
 
             //remove SSH-x.x
-            product = product.replaceAll("(SSH-\\d+(\\.\\d+)?-)","");
+            product = product.replaceAll("(SSH-\\d+(\\.\\d+)?-)", "");
 
-            Log.d(TAG,"Doing regex on: "+product);
+            Log.d(TAG, "Doing regex on: " + product);
 
             //remove version
-            product = product.replaceAll("(v\\s?)?\\d+(\\.\\d+)*","");
+            product = product.replaceAll("(v\\s?)?\\d+(\\.\\d+)*", "");
 
             //remove ending underscores or hyphens
-            product = product.replaceAll("(_|-)+$","");
+            product = product.replaceAll("(_|-)+$", "");
 
             //replace in between underscores or hypens with space
-            product = product.replaceAll("(_|-)"," ");
+            product = product.replaceAll("(_|-)", " ");
 
             product = product.toLowerCase();
 
-            if(product.trim().equals("dropbear")){
-                Log.d(TAG,"This equaled dropbear: "+ product);
+            if (product.trim().equals("dropbear")) {
+                Log.d(TAG, "This equaled dropbear: " + product);
                 return "dropbear_ssh";
-            }else{
-                Log.d(TAG,"This did not equal dropbear: "+ product);
+            } else {
+                Log.d(TAG, "This did not equal dropbear: " + product);
             }
 
             return product;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
     }
 
-    private static String extractSSHVersion(String banner){
-        try{
+    private static String extractSSHVersion(String banner) {
+        try {
             String product = banner.split("\n")[0];
 
             //remove SSH-x.x
-            product = product.replaceAll("(SSH-\\d+(\\.\\d+)?-)","");
+            product = product.replaceAll("(SSH-\\d+(\\.\\d+)?-)", "");
 
             Pattern p = Pattern.compile("(v\\s?)?\\d+(\\.\\d+)*");
 
             Matcher m = p.matcher(product);
 
-            if (m.find()){
+            if (m.find()) {
                 String version = m.group(0);
 
                 return version;
-            }else{
+            } else {
                 return "*";
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
     }
 
     //HTTP
-    private static String extractHTTPProduct(String banner){
+    private static String extractHTTPProduct(String banner) {
         Pattern p = Pattern.compile("(Server:)|(SERVER:)\\s.*");
 
         Matcher m = p.matcher(banner);
 
-        try{
-            if (m.find()){
+        try {
+            if (m.find()) {
                 String product = m.group(0);
                 product = product.split("\\s\\(")[0];
 
                 //remove version identifiers
-                product = product.replaceAll("/?\\d+(\\.\\d+)?","");
+                product = product.replaceAll("/?\\d+(\\.\\d+)?", "");
 
                 //remove ending space
-                product = product.replaceAll("\\s+$","");
+                product = product.replaceAll("\\s+$", "");
 
                 return product;
-            }else{
+            } else {
                 return null;
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
 
     }
 
-    private static String extractHTTPVersion(String banner){
+    private static String extractHTTPVersion(String banner) {
         Pattern p = Pattern.compile("(Server:)|(SERVER:)\\s.*");
 
         Matcher m = p.matcher(banner);
 
-        try{
-            if (m.find()){
+        try {
+            if (m.find()) {
                 String product = m.group(0);
 
                 //Remove the initial Server:
@@ -610,27 +609,27 @@ public class Utils {
                 Pattern p2 = Pattern.compile("/?\\d+(\\.\\d+)?");
                 Matcher m2 = p2.matcher(product);
 
-                if (m2.find()){
+                if (m2.find()) {
                     String version = m2.group(0);
 
-                    if(version.charAt(0) == '/'){
+                    if (version.charAt(0) == '/') {
                         return version.substring(1);
-                    }else{
+                    } else {
                         return version;
                     }
-                }else{
+                } else {
                     return "*";
                 }
-            }else{
+            } else {
                 return null;
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
 
     }
 
-    private static String extractUPNPProduct(String banner){
+    private static String extractUPNPProduct(String banner) {
         Pattern p = Pattern.compile("((Server:)|(SERVER:))\\s.*");
 
         Matcher m = p.matcher(banner);
@@ -638,56 +637,56 @@ public class Utils {
         Pattern p2 = Pattern.compile("MiniUPnPd");
         Matcher m2 = p2.matcher(banner);
 
-        try{
-            if(m2.find()){
+        try {
+            if (m2.find()) {
                 return "miniupnpd";
-            }else{
-                if(m.find()){
+            } else {
+                if (m.find()) {
                     String product = m.group(0);
-                    System.out.println("About to get substring on this: "+product);
+                    System.out.println("About to get substring on this: " + product);
                     product = product.substring(8);
                     product = product.split("(, )|(\\s)")[0];
 
                     //remove version identifiers
                     product = product.split("/")[0];
 
-                    if (product.toLowerCase().equals("linux")){
+                    if (product.toLowerCase().equals("linux")) {
                         return "linux_kernel";
-                    }else if(product.toLowerCase().equals("posix")){
+                    } else if (product.toLowerCase().equals("posix")) {
                         return "posix";
-                    }else if(product.toLowerCase().equals("vxworks")){
+                    } else if (product.toLowerCase().equals("vxworks")) {
                         return "vxworks";
-                    }else{
+                    } else {
                         return product;
                     }
-                }else{
+                } else {
                     return null;
                 }
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
 
     }
 
-    private static String extractUPNPVersion(String banner){
+    private static String extractUPNPVersion(String banner) {
         String extractedProd = extractUPNPProduct(banner);
         //Add specific case for posix
-        if(extractedProd.equals("posix")){
+        if (extractedProd.equals("posix")) {
             return "*";
         }
 
         //Add specific case for miniupnpd
-        if(extractedProd.equals("miniupnpd")){
+        if (extractedProd.equals("miniupnpd")) {
             Pattern p = Pattern.compile("MiniUPnPd.*");
             Matcher m = p.matcher(banner);
 
-            if (m.find()){
+            if (m.find()) {
                 String product = m.group(0);
                 product = product.substring(8);
                 product = product.split("(, )|(\\s)")[0];
 
-                String version =  product.split("/")[1];
+                String version = product.split("/")[1];
 
                 return version.split("_|[a-zA-Z]")[0];
             }
@@ -697,69 +696,69 @@ public class Utils {
 
         Matcher m = p.matcher(banner);
 
-        try{
-            if (m.find()){
+        try {
+            if (m.find()) {
                 String product = m.group(0);
                 product = product.substring(8);
                 product = product.split("(, )|(\\s)")[0];
 
-                String version =  product.split("/")[1];
+                String version = product.split("/")[1];
 
                 version = version.split("_|\\-|\\+")[0];
 
                 return version;
-            }else{
+            } else {
                 return null;
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
 
     }
 
-    public static String extractUPNPLocation(String banner){
+    public static String extractUPNPLocation(String banner) {
         Pattern p = Pattern.compile("(Location:)|(LOCATION:)\\s.*");
 
         Matcher m = p.matcher(banner);
 
-        try{
-            if (m.find()){
+        try {
+            if (m.find()) {
                 String location = m.group(0);
                 location = location.substring(10);
 
                 return location;
-            }else{
+            } else {
                 return null;
             }
-        }catch (Exception ex){
-            Log.d(TAG,ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(TAG, ex.getMessage());
             return null;
         }
     }
 
-    public static String extractDeviceName(String xml){
+    public static String extractDeviceName(String xml) {
         Pattern p = Pattern.compile("<friendlyName>([^<]+)");
         Matcher m = p.matcher(xml);
 
-        try{
-            if (m.find()){
+        try {
+            if (m.find()) {
                 String name = m.group(1);
 
                 return name;
-            }else{
+            } else {
                 return null;
             }
-        }catch (Exception ex){
-            Log.d(TAG,ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(TAG, ex.getMessage());
             return null;
         }
     }
 
-    public static byte[] getBytesFromString(String ip){
+    public static byte[] getBytesFromString(String ip) {
         String[] pieces = ip.split("\\.");
         byte[] address = new byte[4];
 
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             int pieceVal = Integer.parseInt(pieces[i]);
             address[i] = (byte) pieceVal;
         }
@@ -776,12 +775,12 @@ public class Utils {
 
             // Create Hex String
             StringBuffer hexString = new StringBuffer();
-            for (int i=0; i<messageDigest.length; i++)
+            for (int i = 0; i < messageDigest.length; i++)
                 hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
             return hexString.toString();
 
         } catch (NoSuchAlgorithmException e) {
-            Log.d(TAG,e.getMessage());
+            Log.d(TAG, e.getMessage());
         }
         return "";
     }
