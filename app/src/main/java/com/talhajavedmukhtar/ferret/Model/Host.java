@@ -16,11 +16,30 @@ public class Host {
     private String deviceName;
     private String deviceType;
     private Boolean vulnerable;
-    private CVESearcher.Tuple< ArrayList<String>, ArrayList<String>> ident_descs;
+    private CVESearcher.Tuple<ArrayList<String>, ArrayList<String>> ident_descs;
+    private boolean vulnerabilityCheckDone;
+    private boolean nameGrabDone;
 
-    public Host(){
+
+    public Host() {
         discoveredThrough = new ArrayList<>();
         vulnerable = null;
+    }
+
+    public boolean getvulnerabilityCheckDone() {
+        return vulnerabilityCheckDone;
+    }
+
+    public void setvulnerabilityCheckDone(boolean vulnerabilityCheckDone) {
+        this.vulnerabilityCheckDone = vulnerabilityCheckDone;
+    }
+
+    public boolean getnameGrabDone() {
+        return nameGrabDone;
+    }
+
+    public void setnameGrabDone(boolean nameGrabDone) {
+        this.nameGrabDone = nameGrabDone;
     }
 
     public String getIpAddress() {
@@ -31,13 +50,11 @@ public class Host {
         this.ipAddress = ipAddress;
     }
 
-    public CVESearcher.Tuple< ArrayList<String>, ArrayList<String>> getIdentDescs()
-    {
+    public CVESearcher.Tuple<ArrayList<String>, ArrayList<String>> getIdentDescs() {
         return ident_descs;
     }
 
-    public void setIdentDescs(CVESearcher.Tuple< ArrayList<String>, ArrayList<String>> ident_descs)
-    {
+    public void setIdentDescs(CVESearcher.Tuple<ArrayList<String>, ArrayList<String>> ident_descs) {
         this.ident_descs = ident_descs;
     }
 
@@ -49,7 +66,7 @@ public class Host {
         this.discoveredThrough = discoveredThrough;
     }
 
-    public void addDiscoveredThrough(String protocol){
+    public void addDiscoveredThrough(String protocol) {
         discoveredThrough.add(protocol);
     }
 
@@ -58,13 +75,13 @@ public class Host {
     }
 
     public void setVendor(String vendor) {
-        if(vendor != null){
-            if(vendor.substring(0,1).equals("\"")){
-                this.vendor = vendor.substring(1,vendor.length()-1);
-            }else{
+        if (vendor != null) {
+            if (vendor.substring(0, 1).equals("\"")) {
+                this.vendor = vendor.substring(1, vendor.length() - 1);
+            } else {
                 this.vendor = vendor;
             }
-        }else{
+        } else {
             this.vendor = "Unknown Vendor";
         }
 

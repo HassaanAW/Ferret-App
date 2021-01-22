@@ -28,7 +28,7 @@ public class MDNSDiscoverer extends AsyncTask {
 
     private DiscoveryInterface discoveryInterface;
 
-    public MDNSDiscoverer(Context context, int tO){
+    public MDNSDiscoverer(Context context, int tO) {
         mNsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
         mServiceName = "NSD";
 
@@ -50,7 +50,7 @@ public class MDNSDiscoverer extends AsyncTask {
         return null;
     }
 
-    public void setDiscoveryInterface(DiscoveryInterface dInterface){
+    public void setDiscoveryInterface(DiscoveryInterface dInterface) {
         discoveryInterface = dInterface;
     }
 
@@ -76,7 +76,7 @@ public class MDNSDiscoverer extends AsyncTask {
         @Override
         public void onServiceResolved(NsdServiceInfo serviceInfo) {
             final String host = (serviceInfo.getHost().toString()).substring(1);
-
+//            Log.d(TAG, "Service Info: " + serviceInfo.toString());
             discoveryInterface.onHostDiscovered(host, Constants.MDNS);
 
             if (serviceInfo.getServiceName().equals(mServiceName)) {
@@ -88,14 +88,14 @@ public class MDNSDiscoverer extends AsyncTask {
     }
 
     private void stopDiscovery() {
-        for (NsdManager.DiscoveryListener dListener: discoveryListeners) {
+        for (NsdManager.DiscoveryListener dListener : discoveryListeners) {
             mNsdManager.stopServiceDiscovery(dListener);
         }
         discoveryInterface.onDiscoveryCompletion();
     }
 
     private void discoverServices(String serviceType) {
-        if(serviceType.equals("")){
+        if (serviceType.equals("")) {
             NsdManager.DiscoveryListener rootDiscoveryListener = new NsdManager.DiscoveryListener() {
                 @Override
                 public void onDiscoveryStarted(String regType) {
@@ -106,8 +106,8 @@ public class MDNSDiscoverer extends AsyncTask {
                 @Override
                 public void onServiceFound(NsdServiceInfo service) {
 
-                    if(service.getServiceType().contains("local.")){
-                        String newServiceType = service.getServiceName() + "." + service.getServiceType().substring(0,service.getServiceType().length()-6);
+                    if (service.getServiceType().contains("local.")) {
+                        String newServiceType = service.getServiceName() + "." + service.getServiceType().substring(0, service.getServiceType().length() - 6);
                         discoverServices(newServiceType);
                         mNsdManager.resolveService(service, new initializeResolveListener());
                     }
@@ -136,7 +136,7 @@ public class MDNSDiscoverer extends AsyncTask {
             };
             discoveryListeners.add(rootDiscoveryListener);
             mNsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, rootDiscoveryListener);
-        }else{
+        } else {
             NsdManager.DiscoveryListener discoveryListener = new NsdManager.DiscoveryListener() {
 
                 @Override
@@ -182,7 +182,7 @@ public class MDNSDiscoverer extends AsyncTask {
 
     }
 
-    public void waitTillTimeout(final int timeout){
+    public void waitTillTimeout(final int timeout) {
         Thread waitingThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -194,10 +194,10 @@ public class MDNSDiscoverer extends AsyncTask {
             }
         });
         waitingThread.start();
-        try{
+        try {
             waitingThread.join();
-        }catch (Exception ex){
-            Log.d(TAG,ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(TAG, ex.getMessage());
         }
     }
 }
