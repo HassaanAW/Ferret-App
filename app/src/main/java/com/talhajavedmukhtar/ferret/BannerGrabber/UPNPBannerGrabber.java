@@ -18,7 +18,7 @@ import java.util.HashMap;
 /**
  * Created by Talha on 11/23/18.
  */
-public class UPNPBannerGrabber extends AsyncTask{
+public class UPNPBannerGrabber extends AsyncTask {
     private String TAG = Tags.makeTag("UPNPBannerGrabber");
 
     private String ip;
@@ -26,30 +26,30 @@ public class UPNPBannerGrabber extends AsyncTask{
 
     private SubBannerInterface subBannerInterface;
 
-    public UPNPBannerGrabber(String ipAd, Context ctx){
+    public UPNPBannerGrabber(String ipAd, Context ctx) {
         ip = ipAd;
         context = ctx;
     }
 
-    public void setSubBannerInterface(SubBannerInterface bInterface){
+    public void setSubBannerInterface(SubBannerInterface bInterface) {
         subBannerInterface = bInterface;
     }
 
-    private HashMap<String,String> getUPNPBanners(int timeout){
-        HashMap<String,String> ipToBanner = new HashMap<>();
+    private HashMap<String, String> getUPNPBanners(int timeout) {
+        HashMap<String, String> ipToBanner = new HashMap<>();
 
         String DEFAULT_IP = "239.255.255.250";
         int DEFAULT_PORT = 1900;
         String DISCOVERY_QUERY = "M-SEARCH * HTTP/1.1" + "\r\n" +
                 "HOST: 239.255.255.250:1900" + "\r\n" +
                 "MAN: \"ssdp:discover\"" + "\r\n" +
-                "MX: 1"+ "\r\n" +
+                "MX: 1" + "\r\n" +
                 "ST: ssdp:all" + "\r\n" + // Use this for all UPnP Devices
                 "\r\n";
 
-        Log.d(TAG,"Waiting for UPnP");
+        Log.d(TAG, "Waiting for UPnP");
         WifiManager wifi = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        if(wifi != null) {
+        if (wifi != null) {
             WifiManager.MulticastLock lock = wifi.createMulticastLock("The Lock");
             lock.acquire();
             DatagramSocket socket = null;
@@ -72,25 +72,25 @@ public class UPNPBannerGrabber extends AsyncTask{
                     DatagramPacket datagramPacket = new DatagramPacket(new byte[1024], 1024);
                     socket.receive(datagramPacket);
                     String response = new String(datagramPacket.getData(), 0, datagramPacket.getLength());
-                    Log.d(TAG,response);
+                    Log.d(TAG, response);
                     if (response.substring(0, 12).toUpperCase().equals("HTTP/1.1 200")) {
                         String ip = datagramPacket.getAddress().getHostAddress();
-                        ipToBanner.put(ip,response);
-                        Log.d(TAG,"Putting >"+ip+" :"+response);
+                        ipToBanner.put(ip, response);
+                        Log.d(TAG, "Putting >" + ip + " :" + response);
                     }
 
                     curTime = System.currentTimeMillis();
-                    Log.d(TAG,"Difference is: " + Long.toString(curTime-time));
+                    Log.d(TAG, "Difference is: " + Long.toString(curTime - time));
                 }
 
             } catch (final Exception e) {
                 e.printStackTrace();
-                Log.d(TAG,e.toString() + " : " + e.getMessage());
+                Log.d(TAG, e.toString() + " : " + e.getMessage());
             } finally {
                 if (socket != null) {
                     socket.close();
                 }
-                Log.d(TAG,"done");
+                Log.d(TAG, "done");
             }
             lock.release();
 
@@ -102,9 +102,9 @@ public class UPNPBannerGrabber extends AsyncTask{
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        HashMap<String,String> ipToBanner = getUPNPBanners(10000);
+        HashMap<String, String> ipToBanner = getUPNPBanners(10000);
 
-        if(ipToBanner.containsKey(ip)){
+        if (ipToBanner.containsKey(ip)) {
             return ipToBanner.get(ip);
         }
 
@@ -114,7 +114,7 @@ public class UPNPBannerGrabber extends AsyncTask{
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        String bannerText = (String)o;
+        String bannerText = (String) o;
         subBannerInterface.onGrabbed(new Banner(bannerText, Constants.UPNP));
     }
 }

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by Talha on 11/23/18.
  */
-public class BannerGrabber extends AsyncTask{
+public class BannerGrabber extends AsyncTask {
     private String TAG = Tags.makeTag("BannerGrabber");
 
     private String ip;
@@ -24,7 +24,7 @@ public class BannerGrabber extends AsyncTask{
 
     private BannerInterface bannerInterface;
 
-    public BannerGrabber(Context ctx, String ipAd){
+    public BannerGrabber(Context ctx, String ipAd) {
         ip = ipAd;
         banners = new ArrayList<>();
 
@@ -33,14 +33,14 @@ public class BannerGrabber extends AsyncTask{
         subBannerInterface = new SubBannerInterface() {
             @Override
             public void onGrabbed(Banner b) {
-                if(b.getText() != null){
+                if (b.getText() != null) {
                     banners.add(b);
                     publishProgress(b);
                 }
-                synchronized (this){
+                synchronized (this) {
                     counter += 1;
                 }
-                if(counter == tasks){
+                if (counter == tasks) {
                     bannerInterface.onCompletion(banners);
                 }
             }
@@ -48,10 +48,10 @@ public class BannerGrabber extends AsyncTask{
 
         context = ctx;
 
-        Log.d(TAG,"Banner Grabber created for "+ip);
+        Log.d(TAG, "Banner Grabber created for " + ip);
     }
 
-    public void setBannerInterface(BannerInterface bInterface){
+    public void setBannerInterface(BannerInterface bInterface) {
         bannerInterface = bInterface;
     }
 
@@ -65,7 +65,7 @@ public class BannerGrabber extends AsyncTask{
         SSHBannerGrabber sshBannerGrabber = new SSHBannerGrabber(ip);
         sshBannerGrabber.setSubBannerInterface(subBannerInterface);
 
-        UPNPBannerGrabber upnpBannerGrabber = new UPNPBannerGrabber(ip,context);
+        UPNPBannerGrabber upnpBannerGrabber = new UPNPBannerGrabber(ip, context);
         upnpBannerGrabber.setSubBannerInterface(subBannerInterface);
 
         tasks.add(httpBannerGrabber);
@@ -73,11 +73,11 @@ public class BannerGrabber extends AsyncTask{
         tasks.add(upnpBannerGrabber);
 
         //start parallel execution
-        for(AsyncTask aTask: tasks){
+        for (AsyncTask aTask : tasks) {
             aTask.execute();
         }
 
-        Log.d(TAG,"Banner Grabber initiated for "+ip);
+        Log.d(TAG, "Banner Grabber initiated for " + ip);
 
         //wait for each task to execute
         /*
@@ -102,7 +102,7 @@ public class BannerGrabber extends AsyncTask{
     protected void onProgressUpdate(Object[] values) {
         super.onProgressUpdate(values);
 
-        Banner banner = (Banner)values[0];
+        Banner banner = (Banner) values[0];
         bannerInterface.onFound(banner);
     }
 }

@@ -76,7 +76,9 @@ public class MDNSDiscoverer extends AsyncTask {
         @Override
         public void onServiceResolved(NsdServiceInfo serviceInfo) {
             final String host = (serviceInfo.getHost().toString()).substring(1);
-//            Log.d(TAG, "Service Info: " + serviceInfo.toString());
+            Log.d(TAG, "Service Type: " + serviceInfo.getServiceType());
+
+            Log.d(TAG, "Service Info: " + serviceInfo.toString());
             discoveryInterface.onHostDiscovered(host, Constants.MDNS);
 
             if (serviceInfo.getServiceName().equals(mServiceName)) {
@@ -105,6 +107,10 @@ public class MDNSDiscoverer extends AsyncTask {
 
                 @Override
                 public void onServiceFound(NsdServiceInfo service) {
+
+                    Log.d(TAG, "Service Type: " + service.getServiceType());
+
+                    Log.d(TAG, "Service Info: " + service.toString());
 
                     if (service.getServiceType().contains("local.")) {
                         String newServiceType = service.getServiceName() + "." + service.getServiceType().substring(0, service.getServiceType().length() - 6);

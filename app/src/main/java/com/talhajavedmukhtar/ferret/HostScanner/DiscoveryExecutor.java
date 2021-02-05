@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Talha on 11/20/18.
  */
 
-public class DiscoveryExecutor extends AsyncTask{
+public class DiscoveryExecutor extends AsyncTask {
     private String TAG = Tags.makeTag("DiscoveryExecutor");
 
     private ArrayList<String> addressRange;
@@ -31,7 +31,7 @@ public class DiscoveryExecutor extends AsyncTask{
     private int tasksInitiated;
     private int tasksCompleted;
 
-    DiscoveryExecutor(ArrayList<String> addRange, int nThreads){
+    DiscoveryExecutor(ArrayList<String> addRange, int nThreads) {
         addressRange = addRange;
         noOfThreads = nThreads;
         executionInterface = null;
@@ -39,7 +39,7 @@ public class DiscoveryExecutor extends AsyncTask{
         lock = new Object();
     }
 
-    public void setExecutorInterface(ExecutionInterface eInterface){
+    public void setExecutorInterface(ExecutionInterface eInterface) {
         executionInterface = eInterface;
     }
 
@@ -111,13 +111,13 @@ public class DiscoveryExecutor extends AsyncTask{
         tasksInitiated = 0;
         tasksCompleted = 0;
 
-        for(final String ipAd: addressRange){
+        for (final String ipAd : addressRange) {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
                     Boolean hostUp = executionInterface.discover(ipAd);
 
-                    if(hostUp){
+                    if (hostUp) {
                         publishProgress(ipAd);
                         //executionInterface.onHostUp(ipAd);
                     }
@@ -126,10 +126,10 @@ public class DiscoveryExecutor extends AsyncTask{
         }
 
         executorService.shutdown();
-        try{
+        try {
             executorService.awaitTermination(100, TimeUnit.SECONDS);
-        }catch(Exception ex){
-            Log.d(TAG,ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(TAG, ex.getMessage());
         }
 
         //keep adding new jobs until <atleast one thread is left free> and <not all addresses are used up>
@@ -151,7 +151,7 @@ public class DiscoveryExecutor extends AsyncTask{
     @Override
     protected void onProgressUpdate(Object[] values) {
         super.onProgressUpdate(values);
-        String ipAd = (String)values[0];
+        String ipAd = (String) values[0];
         executionInterface.onHostUp(ipAd);
     }
 

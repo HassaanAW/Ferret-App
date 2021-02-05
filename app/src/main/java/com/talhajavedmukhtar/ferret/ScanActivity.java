@@ -234,43 +234,43 @@ public class ScanActivity extends AppCompatActivity {
                 vulnerabilityFinder.executeOnExecutor(threadsExecutor);
 
                 //Start Port Scan
-//                PortScanner portScanner = new PortScanner(h.getIpAddress());
-//                PortScannerInterface portScannerInterface = new PortScannerInterface() {
-//                    @Override
-//                    public void onPortFound(int port) {
-//                        String ip = h.getIpAddress();
-//                        if (ipToPortsData.containsKey(ip)) {
-//                            ipToPortsData.get(ip).add(port);
-//                        } else {
-//                            ipToPortsData.put(ip, new ArrayList<Integer>());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCompletion() {
-//                        synchronized (context) {
-//                            portsScanned += 1;
-//                            updateProgressDetailed();
-//                            Log.d(TAG, "Ports Scanned for: " + Integer.toString(portsScanned) + " devices");
-//
-////                            if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
-//                            if (hostScanEnded && (vulnerabilityChecked == hosts.size())) {
-//
-//                                saveData();
-//                                updateProgress(4);
-//                                Log.d(TAG, "Data saved from PS");
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void on10kDone(int progressVal) {
-//
-//                    }
-//                };
-//                portScanner.setPortScannerInterface(portScannerInterface);
-//                //portScanner.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//                portScanner.executeOnExecutor(threadsExecutor);
+                PortScanner portScanner = new PortScanner(h.getIpAddress());
+                PortScannerInterface portScannerInterface = new PortScannerInterface() {
+                    @Override
+                    public void onPortFound(int port) {
+                        String ip = h.getIpAddress();
+                        if (ipToPortsData.containsKey(ip)) {
+                            ipToPortsData.get(ip).add(port);
+                        } else {
+                            ipToPortsData.put(ip, new ArrayList<Integer>());
+                        }
+                    }
+
+                    @Override
+                    public void onCompletion() {
+                        synchronized (context) {
+                            portsScanned += 1;
+                            updateProgressDetailed();
+                            Log.d(TAG, "Ports Scanned for: " + Integer.toString(portsScanned) + " devices");
+
+//                            if (hostScanEnded && (vulnerabilityChecked == hosts.size()) && (portsScanned == hosts.size())) {
+                            if (hostScanEnded && (vulnerabilityChecked == hosts.size())) {
+
+                                saveData();
+                                updateProgress(4);
+                                Log.d(TAG, "Data saved from PS");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void on10kDone(int progressVal) {
+
+                    }
+                };
+                portScanner.setPortScannerInterface(portScannerInterface);
+                //portScanner.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                portScanner.executeOnExecutor(threadsExecutor);
             }
 
             @Override

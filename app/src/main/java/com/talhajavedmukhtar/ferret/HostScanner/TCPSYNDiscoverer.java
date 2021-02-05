@@ -24,22 +24,22 @@ public class TCPSYNDiscoverer extends AsyncTask {
 
     private DiscoveryInterface discoveryInterface;
 
-    public TCPSYNDiscoverer(String networkAd, int cidr, int tO, int nThreads){
+    public TCPSYNDiscoverer(String networkAd, int cidr, int tO, int nThreads) {
         networkAddress = networkAd;
         networkSize = cidr;
         timeout = tO;
         noOfThreads = nThreads;
     }
 
-    public void setDiscoveryInterface(DiscoveryInterface dInterface){
+    public void setDiscoveryInterface(DiscoveryInterface dInterface) {
         discoveryInterface = dInterface;
     }
 
     @Override
     protected Object doInBackground(Object[] objects) {
-        ArrayList<String> addressRange = Utils.getAddressRange(networkAddress,networkSize);
+        ArrayList<String> addressRange = Utils.getAddressRange(networkAddress, networkSize);
 
-        DiscoveryExecutor discoveryExecutor = new DiscoveryExecutor(addressRange,noOfThreads);
+        DiscoveryExecutor discoveryExecutor = new DiscoveryExecutor(addressRange, noOfThreads);
         discoveryExecutor.setExecutorInterface(new ExecutionInterface() {
             @Override
             public void onHostUp(String ipAd) {
@@ -79,7 +79,7 @@ public class TCPSYNDiscoverer extends AsyncTask {
     @Override
     protected void onProgressUpdate(Object[] values) {
         super.onProgressUpdate(values);
-        String ipAd = (String)values[0];
+        String ipAd = (String) values[0];
         discoveryInterface.onHostDiscovered(ipAd, Constants.TCPSYN);
     }
 
