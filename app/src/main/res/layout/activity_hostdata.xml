@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
 
     >
 
     <RelativeLayout
-        android:layout_margin="10dp"
-        android:layout_weight="3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="3"
         android:gravity="center">
+
         <TextView
             android:id="@+id/deviceDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/Black"
             android:text="Device Details:"
-            android:textSize="25dp"
-            />
+            android:textColor="@color/Black"
+            android:textSize="25dp" />
 
         <TextView
 
             android:id="@+id/vendorLabel"
             android:layout_width="100dp"
             android:layout_height="80dp"
-            android:textColor="@color/Black"
             android:layout_below="@id/deviceDetails"
             android:layout_marginTop="10dp"
             android:text="Vender:"
-            android:textSize="20dp"/>
+            android:textColor="@color/Black"
+            android:textSize="20dp" />
 
         <TextView
 
@@ -37,9 +38,9 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
 
+            android:layout_below="@id/deviceDetails"
             android:layout_marginTop="10dp"
             android:layout_toRightOf="@id/vendorLabel"
-            android:layout_below="@id/deviceDetails"
 
             android:text="..."
             android:textColor="@color/Shakespeare"
@@ -50,44 +51,69 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/vendorLabel"
-            android:textColor="@color/Black"
+            android:layout_marginTop="20dp"
             android:text="Name:"
-            android:textSize="20dp"
-            android:layout_marginTop="20dp"/>
+            android:textColor="@color/Black"
+            android:textSize="20dp" />
 
         <TextView
 
             android:id="@+id/deviceName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="20dp"
-
-            android:layout_toRightOf="@id/deviceNameLabel"
             android:layout_below="@id/vendor"
+            android:layout_marginLeft="0dp"
+
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/deviceNameLabel"
 
             android:text="..."
             android:textColor="@color/Shakespeare"
             android:textSize="20dp" />
+
         <TextView
             android:id="@+id/ipAddressLabel"
-            android:layout_below="@+id/deviceNameLabel"
-            android:layout_marginTop="20dp"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/Black"
+            android:layout_below="@+id/deviceNameLabel"
+            android:layout_marginTop="20dp"
             android:text="IP Address:"
-            android:textSize="20dp"/>
+            android:textColor="@color/Black"
+            android:textSize="20dp" />
 
         <TextView
 
             android:id="@+id/ipAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/deviceNameLabel"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@id/ipAddressLabel"
-            android:layout_below="@id/deviceNameLabel"
+
+            android:text="..."
+            android:textColor="@color/Shakespeare"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/open_portsLabel"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ipAddressLabel"
+            android:layout_marginTop="20dp"
+            android:text="Open Ports:"
+            android:textColor="@color/Black"
+            android:textSize="20dp" />
+
+        <TextView
+
+            android:id="@+id/open_ports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ipAddress"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/open_portsLabel"
 
             android:text="..."
             android:textColor="@color/Shakespeare"
@@ -95,23 +121,23 @@
 
         <TextView
             android:id="@+id/vulnerableLabel"
-            android:layout_below="@+id/ipAddressLabel"
-            android:layout_marginTop="20dp"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/Black"
+            android:layout_below="@+id/open_portsLabel"
+            android:layout_marginTop="20dp"
             android:text="Vulnerable:"
-            android:textSize="20dp"/>
+            android:textColor="@color/Black"
+            android:textSize="20dp" />
 
         <TextView
 
             android:id="@+id/vulnerable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/open_ports"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@id/vulnerableLabel"
-            android:layout_below="@id/ipAddress"
 
             android:text="..."
             android:textColor="@color/Blood"
@@ -119,23 +145,23 @@
 
         <TextView
             android:id="@+id/numvulnerableLabel"
-            android:layout_below="@+id/vulnerable"
-            android:layout_marginTop="20dp"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/Black"
+            android:layout_below="@+id/vulnerable"
+            android:layout_marginTop="20dp"
             android:text="Number of Vulnerabilities:"
-            android:textSize="20dp"/>
+            android:textColor="@color/Black"
+            android:textSize="20dp" />
 
         <TextView
 
             android:id="@+id/numvulnerable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/vulnerable"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="20dp"
             android:layout_toRightOf="@id/numvulnerableLabel"
-            android:layout_below="@id/vulnerable"
 
             android:text="..."
             android:textColor="@color/Blood"
@@ -143,13 +169,14 @@
 
         <TextView
             android:id="@+id/vulndetailsheading"
-            android:layout_below="@+id/numvulnerableLabel"
-            android:layout_marginTop="20dp"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/Black"
+            android:layout_below="@+id/numvulnerableLabel"
+            android:layout_marginTop="20dp"
             android:text="Vulnerability Details:"
-            android:textSize="20dp"/>
+            android:textColor="@color/Black"
+            android:textSize="20dp" />
+
         <android.support.v7.widget.RecyclerView
 
             xmlns:tools="http://schemas.android.com/tools"
@@ -161,7 +188,6 @@
             />
 
     </RelativeLayout>
-
 
 
 </LinearLayout>

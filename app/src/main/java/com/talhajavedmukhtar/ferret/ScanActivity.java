@@ -636,6 +636,10 @@ public class ScanActivity extends AppCompatActivity {
                             intent.putExtra("name", currhost.getDeviceName());
                             intent.putExtra("ip", currhost.getIpAddress());
                             intent.putExtra("vulnerable", currhost.getVulnerable());
+                            if (ipToPortsData.get(currhost.getIpAddress()) != null) {
+                                intent.putExtra("open_ports", ipToPortsData.get(currhost.getIpAddress()));
+                            }
+
 
                             Log.d(TAG, currhost.getVendor());
                             Log.d(TAG, currhost.getDeviceName());
