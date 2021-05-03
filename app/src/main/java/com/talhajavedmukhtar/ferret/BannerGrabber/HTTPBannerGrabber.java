@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Talha on 11/23/18.
  */
-public class HTTPBannerGrabber extends AsyncTask{
+public class HTTPBannerGrabber extends AsyncTask {
     private String TAG = Tags.makeTag("HTTPBannerGrabber");
 
     private String ip;
@@ -27,38 +27,38 @@ public class HTTPBannerGrabber extends AsyncTask{
 
     private SubBannerInterface subBannerInterface;
 
-    public HTTPBannerGrabber(String ipAd){
+    public HTTPBannerGrabber(String ipAd) {
         ip = ipAd;
         connectionSocket = new Socket();
     }
 
-    public void setSubBannerInterface(SubBannerInterface bInterface){
+    public void setSubBannerInterface(SubBannerInterface bInterface) {
         subBannerInterface = bInterface;
     }
 
-    private Boolean formConnection(String ip, int timeout){
-        try{
-            connectionSocket.connect(new InetSocketAddress(ip,80),timeout);
+    private Boolean formConnection(String ip, int timeout) {
+        try {
+            connectionSocket.connect(new InetSocketAddress(ip, 80), timeout);
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             //Log.d(TAG,"Could not connect to "+ ip + " at port "+ Integer.toString(22) + " " + ex.getMessage());
             return false;
         }
     }
 
-    private String getResponse(){
+    private String getResponse() {
         String response = "";
 
-        try{
+        try {
             InputStream is = connectionSocket.getInputStream();
             byte[] buffer = new byte[1024];
             int read;
 
-            while((read = is.read(buffer)) != -1) {
+            while ((read = is.read(buffer)) != -1) {
                 String output = new String(buffer, 0, read);
-                Log.d(TAG,output);
+                Log.d(TAG, output);
 
-                if(output.length() > 0){
+                if (output.length() > 0) {
                     response += output;
                     break;
                 }
@@ -66,35 +66,38 @@ public class HTTPBannerGrabber extends AsyncTask{
                     response += output.split("\\n")[0];
                     break;
                 }*/
-            };
+            }
+            ;
 
-        }catch (Exception ex){
-            Log.d(TAG,ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(TAG, ex.getMessage());
         }
 
+        Log.d(TAG, "response from HTTP: " + response);
         return response;
     }
 
-    private String grabBanner(String ip,int connectionTimeout){
+    private String grabBanner(String ip, int connectionTimeout) {
         String message = "";
-        if(formConnection(ip,connectionTimeout)){
-            Log.d(TAG,"Connected to host "+ ip);
+        if (formConnection(ip, connectionTimeout)) {
+            Log.d(TAG, "Connected to host " + ip);
             String response = getResponse();
-            if(response.equals("")){
+            if (response.equals("")) {
                 message = null;
-            }else{
+            } else {
                 message += response;
             }
-        }else{
+        } else {
             message = null;
         }
 
-        try{
+        try {
             connectionSocket.close();
-        }catch (Exception ex){
-            Log.d(TAG,ex.getMessage());
+        } catch (Exception ex) {
+            Log.d(TAG, ex.getMessage());
         }
 
+        Log.d(TAG, "message from HTTP: " + message);
         return message;
     }
 
@@ -105,7 +108,7 @@ public class HTTPBannerGrabber extends AsyncTask{
         Future<String> f = service.submit(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                return grabBanner(ip,10000);
+                return grabBanner(ip, 10000);
             }
         });
 
@@ -123,7 +126,7 @@ public class HTTPBannerGrabber extends AsyncTask{
     @Override
     protected void onPostExecute(Object o) {
         super.onPostExecute(o);
-        String bannerText = (String)o;
+        String bannerText = (String) o;
         subBannerInterface.onGrabbed(new Banner(bannerText, Constants.HTTP));
     }
 }

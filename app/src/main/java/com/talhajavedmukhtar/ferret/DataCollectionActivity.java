@@ -22,13 +22,13 @@ public class DataCollectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MyApp.setNameCollectionConsent(nameCollectionConsent.isChecked());
-                goToScanActivity();
+                goToInitialSurveyActivity();
             }
         });
     }
 
-    public void goToScanActivity(){
-        Intent intent = new Intent(this, ScanActivity.class);
+    public void goToInitialSurveyActivity() {
+        Intent intent = new Intent(this, InitialSurveyActivity.class);
         startActivity(intent);
         finish();
     }

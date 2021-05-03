@@ -100,6 +100,9 @@ public class ScanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
+        continuetopayment = findViewById(R.id.continuetopayment);
+        continuetopayment.getBackground().setAlpha(45);
+
         hosts = new ArrayList<>();
         hostView = findViewById(R.id.hostData);
 //        hostView.setAlpha(0.7f);
@@ -610,7 +613,7 @@ public class ScanActivity extends AppCompatActivity {
 
 
         continuetopayment = findViewById(R.id.continuetopayment);
-        continuetopayment.setBackgroundColor(Color.parseColor("#000000"));
+        continuetopayment.getBackground().setAlpha(255);
 
         continuetopayment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -713,7 +716,9 @@ public class ScanActivity extends AppCompatActivity {
         } else {
             //
 
-            Intent intent = new Intent(this, PaymentActivity.class);
+//            Intent intent = new Intent(this, PaymentActivity.class);
+            Intent intent = new Intent(this, FinalSurveyActivity.class);
+
             intent.putExtra("vulnerable", vulnerable);
 
             startActivity(intent);

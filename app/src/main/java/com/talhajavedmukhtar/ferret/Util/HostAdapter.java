@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.talhajavedmukhtar.ferret.Model.Host;
 import com.talhajavedmukhtar.ferret.R;
 
@@ -23,18 +31,19 @@ import pl.droidsonroids.gif.GifImageView;
  */
 
 public class HostAdapter extends ArrayAdapter<Host> {
+    private String TAG = Tags.makeTag("HostAdapter");
     private ArrayList<Host> hosts;
     private Context context;
 
-    private static class ViewHolder{
+    private static class ViewHolder {
         TextView vendorName;
         TextView deviceName;
         TextView ipAddress;
         GifImageView status;
     }
 
-    public HostAdapter(ArrayList<Host> hostData, Context ctx){
-        super(ctx, R.layout.host_item,hostData);
+    public HostAdapter(ArrayList<Host> hostData, Context ctx) {
+        super(ctx, R.layout.host_item, hostData);
         hosts = hostData;
         context = ctx;
     }
@@ -58,31 +67,31 @@ public class HostAdapter extends ArrayAdapter<Host> {
             viewHolder.ipAddress = (TextView) convertView.findViewById(R.id.ipAddress);
             viewHolder.status = (GifImageView) convertView.findViewById(R.id.status);
 
-            result=convertView;
+            result = convertView;
 
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
-            result=convertView;
+            result = convertView;
         }
 
         String vendor = host.getVendor();
 
-        if(vendor.length() > 14){
-            vendor = vendor.substring(0,11) + "..";
+        if (vendor.length() > 14) {
+            vendor = vendor.substring(0, 11) + "..";
         }
 
         viewHolder.vendorName.setText(vendor);
         viewHolder.deviceName.setText(host.getDeviceName());
         viewHolder.ipAddress.setText(host.getIpAddress());
 
-        if(host.getVulnerable() == null){
+        if (host.getVulnerable() == null) {
             convertView.setBackgroundColor(context.getResources().getColor(R.color.Shakespeare));
             viewHolder.status.setImageResource(R.drawable.wait);
-        }else if(host.getVulnerable()){
+        } else if (host.getVulnerable()) {
             convertView.setBackgroundColor(context.getResources().getColor(R.color.Blood));
             viewHolder.status.setImageResource(R.drawable.vulnerable);
-        }else{
+        } else {
             convertView.setBackgroundColor(context.getResources().getColor(R.color.Grass));
             viewHolder.status.setImageResource(R.drawable.safe);
         }
@@ -90,8 +99,6 @@ public class HostAdapter extends ArrayAdapter<Host> {
         // Return the completed view to render on screen
         return convertView;
     }
-
-
 
 
 }

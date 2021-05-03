@@ -5,9 +5,17 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.talhajavedmukhtar.ferret.Model.Banner;
+import com.talhajavedmukhtar.ferret.Model.Host;
 import com.talhajavedmukhtar.ferret.Util.Tags;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+
+import org.apache.commons.net.telnet.TelnetClient;
+
+import java.io.InputStream;
+import java.io.PrintStream;
 
 /**
  * Created by Talha on 11/23/18.
@@ -22,9 +30,16 @@ public class BannerGrabber extends AsyncTask {
     private SubBannerInterface subBannerInterface;
     private Context context;
 
+
+    private TelnetClient telnet = new TelnetClient();
+    private InputStream in;
+    private PrintStream out;
+    private Host host;
+
     private BannerInterface bannerInterface;
 
-    public BannerGrabber(Context ctx, String ipAd) {
+    public BannerGrabber(Context ctx, String ipAd, Host hostobj) {
+        host = hostobj;
         ip = ipAd;
         banners = new ArrayList<>();
 
@@ -58,7 +73,7 @@ public class BannerGrabber extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] objects) {
         ArrayList<AsyncTask> tasks = new ArrayList<>();
-
+//send port as parameter s
         HTTPBannerGrabber httpBannerGrabber = new HTTPBannerGrabber(ip);
         httpBannerGrabber.setSubBannerInterface(subBannerInterface);
 
@@ -68,9 +83,30 @@ public class BannerGrabber extends AsyncTask {
         UPNPBannerGrabber upnpBannerGrabber = new UPNPBannerGrabber(ip, context);
         upnpBannerGrabber.setSubBannerInterface(subBannerInterface);
 
+        TelnetBannerGrabber telnetBannerGrabber = new TelnetBannerGrabber(ip);
+        telnetBannerGrabber.setSubBannerInterface(subBannerInterface);
+
+        SMTPBannerGrabber smtpBannerGrabber = new SMTPBannerGrabber(ip);
+        smtpBannerGrabber.setSubBannerInterface(subBannerInterface);
+
+        FTPBannerGrabber ftpBannerGrabber = new FTPBannerGrabber(ip);
+        ftpBannerGrabber.setSubBannerInterface(subBannerInterface);
+
+        DNSBannerGrabber dnsBannerGrabber = new DNSBannerGrabber(ip);
+        dnsBannerGrabber.setSubBannerInterface(subBannerInterface);
+
+        DHCPBannerGrabber dhcpBannerGrabber = new DHCPBannerGrabber(ip);
+        dhcpBannerGrabber.setSubBannerInterface(subBannerInterface);
+
         tasks.add(httpBannerGrabber);
         tasks.add(sshBannerGrabber);
         tasks.add(upnpBannerGrabber);
+        tasks.add(telnetBannerGrabber);
+        tasks.add(smtpBannerGrabber);
+        tasks.add(ftpBannerGrabber);
+        tasks.add(dnsBannerGrabber);
+        tasks.add(dhcpBannerGrabber);
+
 
         //start parallel execution
         for (AsyncTask aTask : tasks) {
@@ -78,6 +114,7 @@ public class BannerGrabber extends AsyncTask {
         }
 
         Log.d(TAG, "Banner Grabber initiated for " + ip);
+
 
         //wait for each task to execute
         /*

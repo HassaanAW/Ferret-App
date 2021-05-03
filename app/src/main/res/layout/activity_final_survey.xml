@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".InstructionsActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@id/name"
+            android:src="@drawable/logo" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Ferret"
+            android:textColor="@color/Shakespeare"
+            android:textSize="30dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/finalsurvey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:paddingLeft="10dp"
+        android:paddingTop="20dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="5dp"
+        android:text="@string/finalsurvey"
+        android:textColor="@color/Shakespeare"
+        android:textSize="25dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/surveyinstructionsheading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/finalsurvey"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+
+        android:text="@string/surveyinstructionheadings"
+        android:textColor="@color/Shakespeare"
+
+        android:textSize="17dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/surveyinstructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/surveyinstructionsheading"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
+        android:text="@string/surveyinstructions" />
+
+
+    <Button
+        android:id="@+id/opensurvey"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="137dp"
+        android:layout_height="61dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="10dp"
+        android:text="OPEN SURVEY"
+
+        />
+
+    <Button
+        android:id="@+id/proceed"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="106dp"
+        android:layout_height="61dp"
+        android:layout_alignParentBottom="true"
+
+        android:layout_marginLeft="88dp"
+        android:layout_marginRight="30dp"
+
+        android:layout_marginBottom="10dp"
+        android:layout_toRightOf="@+id/opensurvey"
+
+        android:text="PROCEED" />
+
+
+</RelativeLayout>

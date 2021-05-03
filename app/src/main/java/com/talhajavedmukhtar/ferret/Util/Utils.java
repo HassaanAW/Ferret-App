@@ -7,6 +7,13 @@ import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.talhajavedmukhtar.ferret.Model.Banner;
 import com.talhajavedmukhtar.ferret.Model.Host;
 import com.talhajavedmukhtar.ferret.MyApp;
@@ -33,6 +40,7 @@ import static android.content.Context.WIFI_SERVICE;
 
 public class Utils {
     private static String TAG = Tags.makeTag("Utils");
+    
 
     private static ArrayList<String> generateAddresses(String[] octetArray, int octetNo, int intFromOctet) {
         ArrayList<String> adds = new ArrayList<>();
@@ -319,8 +327,10 @@ public class Utils {
                                 String vendor;
                                 try {
                                     vendor = myApp.getMap().findVendor(mac);
+//                                    vendor = getVendor(mac);
                                 } catch (Exception ex) {
                                     vendor = "Unknown";
+
                                 }
 
                                 String name;
@@ -784,4 +794,6 @@ public class Utils {
         }
         return "";
     }
+
+
 }

@@ -10,12 +10,15 @@
     <application
         android:name=".MyApp"
         android:allowBackup="true"
+
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".DataCollectionActivity"></activity>
+        <activity android:name=".InitialSurveyActivity" />
+        <activity android:name="InitialSurveyWebviewActivity" />
         <activity android:name=".SecretKeyActivity" />
         <activity android:name=".LabellingActivity" />
         <activity android:name=".InstructionsActivity" />
@@ -50,7 +53,10 @@
         <activity android:name=".WhereActivity" />
         <activity android:name=".MacNotFoundActivity" />
         <activity android:name=".ThankYouActivity" />
+        <activity android:name=".FinalSurveyActivity" />
+        <activity android:name=".FinalSurveyWebviewActivity" />
         <activity android:name=".HostDataActivity" />
+
 
     </application>
 

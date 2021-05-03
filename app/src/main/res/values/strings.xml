@@ -104,5 +104,11 @@
     <string name="pleaserunagain"> Please run the scan again.</string>
     <string name="thankyou">Thank you for participating!</string>
     <string name="runagain">Do you wish to run the scan again?</string>
+    <string name="initialsurvey">Time for a survey!</string>
+    <string name="finalsurvey">Time for another survey!</string>
+    <string name="surveyinstructions">Tap the Open Survey button below and answer the questions on the Google Form that pops up.\n\nTry to answer questions as truthfully and accurately as possible.\n\nOnce the Google Form Survey has been submitted, please tap your Android device\'s Back Button at the bottom to return back to the app and tap on the proceed button to continue.\n\nIn case you wish to change your answers, you can open the survey again by tapping the Open Survey button and change your responses on the Google Form that opens up.\n\nThank you for your patience and good luck!</string>
+    >
+    <string name="surveyinstructionheadings">Instructions</string>
+
 
 </resources>

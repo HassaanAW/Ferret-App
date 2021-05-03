@@ -97,7 +97,7 @@ public class HostDataActivity extends AppCompatActivity {
         for (int i = 0; i < idents.size(); i++) {
             vulndetails[i] = new VulnDetailsData(idents.get(i), descs.get(i));
         }
-
+// comment this block of code to disable vulnerability details
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.vulndetails);
         VulnDetailsAdapter adapter = new VulnDetailsAdapter(vulndetails);
         recyclerView.setHasFixedSize(true);
