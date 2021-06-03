@@ -168,7 +168,7 @@ public class HostScanner extends AsyncTask {
                         if (macAdd != null) {
 
                             vendor[0] = "Unknown Vendor";
-                            vendor[0] = response;
+                            vendor[0] = response.toUpperCase();
 
                             if (vendor[0] == "Unknown Vendor") {
                                 vendor[0] = myApp.getMap().findVendor(macAdd);

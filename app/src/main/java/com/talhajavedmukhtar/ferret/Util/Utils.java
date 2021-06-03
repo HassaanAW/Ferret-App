@@ -14,6 +14,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.talhajavedmukhtar.ferret.HostScanner.NYUAPIInterface;
 import com.talhajavedmukhtar.ferret.Model.Banner;
 import com.talhajavedmukhtar.ferret.Model.Host;
 import com.talhajavedmukhtar.ferret.MyApp;
@@ -40,7 +41,9 @@ import static android.content.Context.WIFI_SERVICE;
 
 public class Utils {
     private static String TAG = Tags.makeTag("Utils");
-    
+    private Context context;
+    private static NYUAPIInterface nyuapiInterface;
+
 
     private static ArrayList<String> generateAddresses(String[] octetArray, int octetNo, int intFromOctet) {
         ArrayList<String> adds = new ArrayList<>();
@@ -324,21 +327,35 @@ public class Utils {
                     if (mac.matches("..:..:..:..:..:..")) {
                         if (!mac.equals("00:00:00:00:00:00")) {
                             if (!ipAddresses.contains(ip)) {
-                                String vendor;
-                                try {
-                                    vendor = myApp.getMap().findVendor(mac);
-//                                    vendor = getVendor(mac);
-                                } catch (Exception ex) {
-                                    vendor = "Unknown";
+                                final String[] vendor = new String[1];
+                                nyuapiInterface = new NYUAPIInterface() {
+                                    @Override
+                                    public void Success(String response) {
+                                        Log.d(TAG, "VENDER GOTTEN: " + response);
 
-                                }
 
-                                String name;
-                                byte[] address = getBytesFromString(ip);
+                                        if (mac != null) {
 
-                                try {
-                                    InetAddress inetAddress = InetAddress.getByAddress(address);
-                                    Log.d(TAG, "Passed this");
+                                            vendor[0] = "Unknown Vendor";
+                                            vendor[0] = response.toUpperCase();
+
+                                            if (vendor[0] == "Unknown Vendor") {
+                                                vendor[0] = myApp.getMap().findVendor(mac);
+
+                                            }
+
+
+                                        } else {
+                                            vendor[0] = "Unknown Vendor";
+                                        }
+
+                                        //Log.d(TAG,"IP: "+ipAd+" Name:"+name);
+                                        String name;
+                                        byte[] address = getBytesFromString(ip);
+
+                                        try {
+                                            InetAddress inetAddress = InetAddress.getByAddress(address);
+                                            Log.d(TAG, "Passed this");
 
                                     /*Boolean reachable = inetAddress.isReachable(1000);
 
@@ -348,25 +365,80 @@ public class Utils {
                                         Log.d(TAG, "Could not reach");
                                     }*/
 
-                                    name = inetAddress.getCanonicalHostName();
-                                } catch (Exception ex) {
-                                    //Log.d(TAG,"Other");
-                                    name = "Unknown Name";
-                                }
+                                            name = inetAddress.getCanonicalHostName();
+                                        } catch (Exception ex) {
+                                            //Log.d(TAG,"Other");
+                                            name = "Unknown Name";
+                                        }
+
+// === commented this out as it was adding repeating hosts ===
+                                        Host newHost = new Host();
+                                        newHost.setIpAddress(ip);
+                                        newHost.addDiscoveredThrough(Constants.ARP);
+                                        newHost.setVendor(vendor[0]);
+                                        newHost.setDeviceName(name);
 
 
-                                Host newHost = new Host();
-                                newHost.setIpAddress(ip);
-                                newHost.addDiscoveredThrough(Constants.ARP);
-                                newHost.setVendor(vendor);
-                                newHost.setDeviceName(name);
+                                        newHost.setMAhash(md5(mac));
+
+                                        MyApp.addDeviceDetails(ip, mac, vendor[0]);
+
+                                        additionalHosts.add(newHost);
 
 
-                                newHost.setMAhash(md5(mac));
+                                    }
 
-                                MyApp.addDeviceDetails(ip, mac, vendor);
+                                    @Override
+                                    public void Error(VolleyError error) {
 
-                                additionalHosts.add(newHost);
+                                    }
+                                };
+
+//
+//                                String vendor;
+//                                try {
+//                                    vendor = myApp.getMap().findVendor(mac);
+////                                    vendor = getVendor(mac);
+//                                } catch (Exception ex) {
+//                                    vendor = "Unknown";
+//
+//                                }
+//
+//                                String name;
+//                                byte[] address = getBytesFromString(ip);
+//
+//                                try {
+//                                    InetAddress inetAddress = InetAddress.getByAddress(address);
+//                                    Log.d(TAG, "Passed this");
+//
+//                                    /*Boolean reachable = inetAddress.isReachable(1000);
+//
+//                                    if(reachable){
+//                                        Log.d(TAG,"Was reached");
+//                                    }else{
+//                                        Log.d(TAG, "Could not reach");
+//                                    }*/
+//
+//                                    name = inetAddress.getCanonicalHostName();
+//                                } catch (Exception ex) {
+//                                    //Log.d(TAG,"Other");
+//                                    name = "Unknown Name";
+//                                }
+//
+//// === commented this out as it was adding repeating hosts ===
+//                                Host newHost = new Host();
+//                                newHost.setIpAddress(ip);
+//                                newHost.addDiscoveredThrough(Constants.ARP);
+//                                newHost.setVendor(vendor);
+//                                newHost.setDeviceName(name);
+//
+//
+//                                newHost.setMAhash(md5(mac));
+//
+//                                MyApp.addDeviceDetails(ip, mac, vendor);
+//
+//                                additionalHosts.add(newHost);
+//// ============================================================
                             }
                         }
                     }
@@ -467,6 +539,93 @@ public class Utils {
 //        }
 
         return additionalHosts;
+    }
+
+    public void getVendor(String mac, final NYUAPIInterface listener) {
+
+        mac = mac.toLowerCase().replace(" ", "").replace(":", "");
+
+        String oui = mac.substring(0, 6);
+
+
+        Log.d(TAG, "oui: " + oui);
+//        Log.d(TAG, "ouidict: " + oui_dict.toString());
+
+//        Log.d(TAG, "contains key: " + Boolean.toString(oui_dict.containsKey(oui)));
+
+//        if ((oui_dict.containsKey(oui)) == true) {
+//            Log.d("found vendor: ", vendor);
+//
+////                    vendor = vendor.replaceAll("^[\"']+|[\"']+$", "");
+//        }
+
+        final String[] foundvendor = {"Unknown Vendor"};
+// Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = "https://iotinspector.org/device_identification/get_vendor/" + oui + "/0";
+
+// Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        listener.Success(response.substring(0, response.length()));
+//                        foundvendor[0] =
+
+//                        Log.d(TAG, "VENDER GOTTEN: " + foundvendor[0]);
+                        Log.d(TAG, "Response from Danny API: " + response.substring(0, response.length()));
+//                        textView.setText("Response is: " + response.substring(0, 500));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+//                textView.setText("That didn't work!");
+                listener.Error(error);
+                Log.d(TAG, "That didn't work!");
+                Log.d(TAG, "error from Danny API: " + error);
+            }
+        });
+
+        stringRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+// Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+
+//        String foundvendor = oui_dict.get(oui);
+//        if (foundvendor != null) {
+//
+//            Log.d(TAG, "found vendor: " + foundvendor);
+//            return foundvendor;
+//        } else {
+//            if (oui_dict.containsKey(oui)) {
+//                // key exists but it's null
+//                foundvendor = "Unknown Vendor";
+//                Log.d(TAG, "found vendor null: " + foundvendor);
+//            } else {
+//                // No such key
+//                foundvendor = "Unknown Vendor";
+//                Log.d(TAG, "found vendor no key: " + foundvendor);
+//
+//            }
+//        }
+
+
     }
 
     public static String getProductFromBanner(Banner b) {

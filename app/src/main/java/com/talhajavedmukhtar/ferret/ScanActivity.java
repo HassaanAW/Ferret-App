@@ -283,7 +283,10 @@ public class ScanActivity extends AppCompatActivity {
                 // All hosts found /discovered at this point
                 for (final Host h : additionalHosts) {
                     Log.d(TAG, "Additional Host Found: " + h.getIpAddress());
-                    hosts.add(h);
+                    if (!hosts.contains(h)) {
+                        hosts.add(h);
+                    }
+
 
                     ScanActivity.runOnUI(new Runnable() {
                         @Override
