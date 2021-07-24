@@ -381,6 +381,7 @@ public class Utils {
 
                                         newHost.setMAhash(md5(mac));
 
+                                        Log.d("Manchester", vendor[0]);
                                         MyApp.addDeviceDetails(ip, mac, vendor[0]);
 
                                         additionalHosts.add(newHost);
@@ -544,6 +545,7 @@ public class Utils {
     public void getVendor(String mac, final NYUAPIInterface listener) {
 
         mac = mac.toLowerCase().replace(" ", "").replace(":", "");
+        Log.d("originalMac", "mac: " + mac);
 
         String oui = mac.substring(0, 6);
 
@@ -605,7 +607,7 @@ public class Utils {
         });
 // Add the request to the RequestQueue.
         queue.add(stringRequest);
-
+        Log.d("StringRequest", String.valueOf(stringRequest));
 
 //        String foundvendor = oui_dict.get(oui);
 //        if (foundvendor != null) {

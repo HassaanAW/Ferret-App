@@ -66,7 +66,7 @@ public class HostDataActivity extends AppCompatActivity {
 
 
         Log.d(TAG, receivedVendor);
-        Log.d(TAG, receivedDeviceName);
+        Log.d("ReceivedDev", receivedDeviceName);
         Log.d(TAG, receivedIpAddress);
 //        int receivedImage = intent.getIntExtra("image",0);
         vendor.setText(receivedVendor.trim());

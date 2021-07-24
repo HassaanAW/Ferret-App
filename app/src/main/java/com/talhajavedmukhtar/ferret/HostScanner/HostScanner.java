@@ -67,7 +67,6 @@ public class HostScanner extends AsyncTask {
 
     public HostScanner(Context ctx, String networdAdd, int netSize, int nThreads, int tO) {
 
-
         networkAddress = networdAdd;
         networkSize = netSize;
         noOfThreads = nThreads;
@@ -106,7 +105,7 @@ public class HostScanner extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] objects) {
-//        readouidict();
+        readouidict();
 
 
         ArrayList<AsyncTask> tasks = new ArrayList<>();
@@ -148,16 +147,15 @@ public class HostScanner extends AsyncTask {
 
     @Override
     protected void onProgressUpdate(Object[] values) {
-
-
         super.onProgressUpdate(values);
         String ipAd = (String) values[0];
         String protocol = (String) values[1];
+        Log.d("Hassaan", "Here");
 
         if (!hostDetails.containsKey(ipAd)) {
             String macAdd = Utils.getMACAddress(ipAd);
             final String[] vendor = new String[1];
-            Log.d(TAG, "macAdd: " + macAdd);
+            Log.d("MACADD", "macAdd: " + macAdd);
 
             nyuapiInterface = new NYUAPIInterface() {
                 @Override
@@ -166,26 +164,22 @@ public class HostScanner extends AsyncTask {
 
                     if (ipadd_macadd.containsKey(ipAd) == false) {
                         if (macAdd != null) {
-
                             vendor[0] = "Unknown Vendor";
                             vendor[0] = response.toUpperCase();
 
                             if (vendor[0] == "Unknown Vendor") {
                                 vendor[0] = myApp.getMap().findVendor(macAdd);
-
                             }
 
-
                             MyApp.addDeviceDetails(ipAd, macAdd, vendor[0]);
-                        } else {
+                        }
+                        else {
                             vendor[0] = "Unknown Vendor";
                         }
 
-                        //Log.d(TAG,"IP: "+ipAd+" Name:"+name);
+                        Log.d("Inside Danny", "3");
 
                         String name = "...";
-
-
                         Host newHost = new Host();
                         newHost.setIpAddress(ipAd);
                         newHost.addDiscoveredThrough(protocol);
@@ -205,15 +199,13 @@ public class HostScanner extends AsyncTask {
 
                 @Override
                 public void Error(VolleyError error) {
-
                 }
             };
 
 
             if (macAdd != null) {
-                getVendor(macAdd, nyuapiInterface);
+                getVendor(macAdd, nyuapiInterface, macAdd, ipAd, protocol, vendor);
             }
-
 
         } else {
             hostDetails.get(ipAd).addDiscoveredThrough(protocol);
@@ -229,7 +221,6 @@ public class HostScanner extends AsyncTask {
 
     private void readouidict() {
 
-
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new InputStreamReader(context.getAssets().open("macToVendor/ouidict.txt")));
@@ -237,19 +228,14 @@ public class HostScanner extends AsyncTask {
             while ((line = bufferedReader.readLine()) != null) {
                 String[] fields = line.split(":");
 //                String mackey = fields[0].replaceAll("^[\"']+|[\"']+$", "");
-                String mackey = fields[0].trim().replaceAll("^[\"']+|[\"']+$", "");
+                String mackey = fields[0].trim().replaceAll("^[\"']+|[\"']+$", "").toLowerCase();
                 String dictvendor = fields[1].substring(0, fields[1].length() - 1);
                 dictvendor = dictvendor.replaceAll("^[\"']+|[\"']+$", "");
 
                 oui_dict.put(mackey, dictvendor);
-
-                Log.d(TAG, "mackey: " + mackey);
-
-                Log.d(TAG, "dictvendor: " + dictvendor);
-
+//                Log.d(TAG, "mackey: " + mackey);
+//                Log.d(TAG, "dictvendor: " + dictvendor);
 //                Log.d(TAG, "fields: " + fields);
-
-
             }
         } catch (Exception ex) {
             Log.d(TAG, ex.getMessage());
@@ -266,90 +252,99 @@ public class HostScanner extends AsyncTask {
     }
 
 
-    public void getVendor(String mac, final NYUAPIInterface listener) {
+    public void getVendor(String mac, final NYUAPIInterface listener, String macAdd, String ipAd, String protocol, final String[] vendor  ) {
 
         mac = mac.toLowerCase().replace(" ", "").replace(":", "");
-
         String oui = mac.substring(0, 6);
+        Log.d("Oui", oui);
+        //Log.d(TAG, "ouidict: " + oui_dict.toString());
+        // Log.d(TAG, "contains key: " + Boolean.toString(oui_dict.containsKey(oui)));
 
+        if ((oui_dict.containsKey(oui)) == true) {
 
-        Log.d(TAG, "oui: " + oui);
-        Log.d(TAG, "ouidict: " + oui_dict.toString());
-
-        Log.d(TAG, "contains key: " + Boolean.toString(oui_dict.containsKey(oui)));
-
-//        if ((oui_dict.containsKey(oui)) == true) {
-//            Log.d("found vendor: ", vendor);
-//
-////                    vendor = vendor.replaceAll("^[\"']+|[\"']+$", "");
-//        }
-
-        final String[] foundvendor = {"Unknown Vendor"};
-// Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "https://iotinspector.org/device_identification/get_vendor/" + oui + "/0";
-
-// Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        listener.Success(response.substring(0, response.length()));
-//                        foundvendor[0] =
-
-//                        Log.d(TAG, "VENDER GOTTEN: " + foundvendor[0]);
-                        Log.d(TAG, "Response from Danny API: " + response.substring(0, response.length()));
-//                        textView.setText("Response is: " + response.substring(0, 500));
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-//                textView.setText("That didn't work!");
-                listener.Error(error);
-                Log.d(TAG, "That didn't work!");
-                Log.d(TAG, "error from Danny API: " + error);
+            String Vendor_Oui = oui_dict.get(oui);
+            if (Vendor_Oui != null) {
+                Log.d(TAG, "found vendor: " + Vendor_Oui + " of " + oui);
+                // return foundvendor;
+            } else {
+                if (oui_dict.containsKey(oui)) {
+                    // key exists but it's null
+                    Vendor_Oui = "Unknown Vendor";
+                    Log.d(TAG, "found vendor null: " + Vendor_Oui+ " of " + oui);
+                } else {
+                    // No such key
+                    Vendor_Oui = "Unknown Vendor";
+                    Log.d(TAG, "found vendor no key: " + Vendor_Oui+ " of " + oui);
+                }
             }
-        });
+            Log.d("Hassaan", "Vendor through OUI");
 
-        stringRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 50000;
+            if (ipadd_macadd.containsKey(ipAd) == false) {
+                if (macAdd != null) {
+                    vendor[0] = "Unknown Vendor";
+                    vendor[0] = Vendor_Oui.toUpperCase();
+                    MyApp.addDeviceDetails(ipAd, macAdd, vendor[0]);
+                }
+
+                String name = "...";
+                Host newHost = new Host();
+                newHost.setIpAddress(ipAd);
+                newHost.addDiscoveredThrough(protocol);
+                newHost.setVendor(vendor[0]);
+                newHost.setDeviceName(name);
+
+                if (macAdd != null) {
+                    newHost.setMAhash(Utils.md5(macAdd));
+                }
+
+                hostDetails.put(ipAd, newHost);
+                scannerInterface.onDeviceFound(newHost);
+                ipadd_macadd.put(ipAd, macAdd);
             }
+        }
+        else {
+            Log.d("Hassaan", "Not found Vendor through OUI");
+            // Instantiate the RequestQueue.
+            RequestQueue queue = Volley.newRequestQueue(context);
+            String url = "https://iotinspector.org/device_identification/get_vendor/" + oui + "/0";
 
-            @Override
-            public int getCurrentRetryCount() {
-                return 50000;
-            }
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // Display the first 500 characters of the response string.
+                            listener.Success(response.substring(0, response.length()));
+                            Log.d(TAG, "Response from Danny's API: " + response.substring(0, response.length()));
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    listener.Error(error);
+                    Log.d(TAG, "That didn't work!");
+                    Log.d(TAG, "error from Danny API: " + error);
+                }
+            });
 
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
+            stringRequest.setRetryPolicy(new RetryPolicy() {
+                @Override
+                public int getCurrentTimeout() {
+                    return 50000;
+                }
 
-            }
-        });
-// Add the request to the RequestQueue.
-        queue.add(stringRequest);
+                @Override
+                public int getCurrentRetryCount() {
+                    return 50000;
+                }
 
+                @Override
+                public void retry(VolleyError error) throws VolleyError {
 
-//        String foundvendor = oui_dict.get(oui);
-//        if (foundvendor != null) {
-//
-//            Log.d(TAG, "found vendor: " + foundvendor);
-//            return foundvendor;
-//        } else {
-//            if (oui_dict.containsKey(oui)) {
-//                // key exists but it's null
-//                foundvendor = "Unknown Vendor";
-//                Log.d(TAG, "found vendor null: " + foundvendor);
-//            } else {
-//                // No such key
-//                foundvendor = "Unknown Vendor";
-//                Log.d(TAG, "found vendor no key: " + foundvendor);
-//
-//            }
-//        }
+                }
+            });
+            // Add the request to the RequestQueue.
+            queue.add(stringRequest);
 
-
+        }
     }
 }

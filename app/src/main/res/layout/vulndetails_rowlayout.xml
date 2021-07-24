@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/vulnidentLabel"
-        android:layout_width="70dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:text="Identifier:"
         android:textColor="@color/Black"
@@ -15,15 +15,17 @@
 
 
         />
+
     <TextView
         android:id="@+id/vulnident"
-        android:layout_width="match_parent"
+        android:layout_width="323dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
         android:layout_toRightOf="@id/vulnidentLabel"
         android:text="ident"
-        android:textColor="@color/Blood"
+        android:textColor="@color/frowncolors"
         android:textSize="15dp"
-        />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/vulndescLabel"

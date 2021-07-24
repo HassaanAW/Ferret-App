@@ -22,13 +22,15 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center">
+
         <TextView
             android:id="@+id/vendorName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/White"
             android:text="VENDOR"
-            android:textSize="25dp"/>
+            android:textColor="@color/White"
+            android:textSize="23dp"
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/deviceName"
             android:layout_width="match_parent"
