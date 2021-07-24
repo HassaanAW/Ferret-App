@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class DataHandler {
     private Context context;
     private String id;
+    private String devMac = Utils.getMacAddr();
 
     public DataHandler(Context ctx){
         context = ctx;
@@ -29,32 +30,32 @@ public class DataHandler {
         }
 
         String timestamp = Long.toString(System.currentTimeMillis());
-        databaseReference.child(id).child("data").child(timestamp).setValue(data);
+        databaseReference.child(devMac).child("data").child(timestamp).setValue(data);
 
         MyApp.setLastTimeStamp(timestamp);
     }
 
     public void pushPaymentData(String message, String lastTimeStamp){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child(id).child("data").child(lastTimeStamp).child("paymentOption").setValue(message);
+        databaseReference.child(devMac).child("data").child(lastTimeStamp).child("paymentOption").setValue(message);
         MyApp.setPaymentDataCollected(true);
     }
 
     public void pushPortsData(int index, String ip, ArrayList<Integer> ports,String lastTimeStamp){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference node = databaseReference.child(id).child("data").child(lastTimeStamp).child("extendedPortsData").child(Integer.toString(index));
+        DatabaseReference node = databaseReference.child(devMac).child("data").child(lastTimeStamp).child("extendedPortsData").child(Integer.toString(index));
         node.child("IP").setValue(ip);
         node.child("OpenPorts").setValue(ports);
     }
 
     public void pushName(String name){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("coolPeople").push().setValue(name);
+        databaseReference.child(devMac).push().setValue(name);
     }
 
     public void pushLabelData(String ip, String deviceType, String deviceModel, String lastTimeStamp){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference = databaseReference.child(id).child("data").child(lastTimeStamp).child("labelData").push();
+        databaseReference = databaseReference.child(devMac).child("data").child(lastTimeStamp).child("labelData").push();
         databaseReference.child("ip").setValue(ip);
         databaseReference.child("deviceType").setValue(deviceType);
         databaseReference.child("deviceModel").setValue(deviceModel);
@@ -62,7 +63,7 @@ public class DataHandler {
 
     public void pushPlaceData(String where, String details, String lastTimeStamp){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference = databaseReference.child(id).child("data").child(lastTimeStamp).child("place");
+        databaseReference = databaseReference.child(devMac).child("data").child(lastTimeStamp).child("place");
         databaseReference.child("where").setValue(where);
         databaseReference.child("details").setValue(details);
 
@@ -70,7 +71,7 @@ public class DataHandler {
 
     public void pushPublicIP(String ip, String lastTimeStamp){
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child(id).child("data").child(lastTimeStamp).child("publicIp").setValue(ip);
+        databaseReference.child(id).child(devMac).child(lastTimeStamp).child("publicIp").setValue(ip);
     }
 
 
